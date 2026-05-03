@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="theme-color" content="#ffffff" />
-  <title>Agenda</title>
+  <title>Template</title>
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -21,341 +21,7 @@
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
-  <style>
-    /* Language Toggle Button */
-    .lang-toggle-btn {
-      background: var(--surface2, #f3f4f6);
-      border: 1px solid var(--border, #e5e7eb);
-      border-radius: 8px;
-      color: var(--text, #1f2937);
-      cursor: pointer;
-      font-family: var(--font);
-      font-size: 0.72rem;
-      height: 32px;
-      letter-spacing: 0.06em;
-      min-width: 36px;
-      padding: 0 8px;
-      transition: background 0.2s, color 0.2s, transform 0.15s;
-      display: none !important;
-    }
 
-    .lang-toggle-btn:hover {}
-
-    .lang-toggle-btn:active {
-      transform: scale(0.95);
-    }
-
-    /* ===== LANGUAGE PICKER MODAL ===== */
-    #lang-picker-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 99999;
-      background: rgba(17, 12, 34, 0.72);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-      animation: lpFadeIn 0.35s ease both;
-    }
-
-    #lang-picker-overlay.hide {
-      animation: lpFadeOut 0.3s ease forwards;
-    }
-
-    @keyframes lpFadeIn {
-      from {
-        opacity: 0;
-      }
-
-      to {
-        opacity: 1;
-      }
-    }
-
-    @keyframes lpFadeOut {
-      from {
-        opacity: 1;
-      }
-
-      to {
-        opacity: 0;
-      }
-    }
-
-    .lp-card {
-      background: #ffffff;
-      border-radius: 28px;
-      padding: 36px 28px 32px;
-      width: 100%;
-      max-width: 360px;
-      text-align: center;
-      box-shadow: 0 32px 80px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.08);
-      animation: lpSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
-    }
-
-    @keyframes lpSlideUp {
-      from {
-        opacity: 0;
-        transform: translateY(32px) scale(0.96);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
-    }
-
-    .lp-logo {
-      width: 64px;
-      height: 64px;
-      object-fit: contain;
-      margin: 0 auto 16px;
-      display: block;
-      filter: drop-shadow(0 4px 12px rgba(124, 58, 237, 0.18));
-    }
-
-    .lp-title {
-      font-family: var(--font);
-      font-size: 1.35rem;
-
-      color: #111827;
-      margin: 0 0 4px;
-      letter-spacing: -0.02em;
-    }
-
-    .lp-subtitle {
-      font-family: var(--font);
-      font-size: 0.85rem;
-      color: #6b7280;
-      margin: 0 0 28px;
-
-    }
-
-    .lp-flags {
-      display: flex;
-      gap: 16px;
-      justify-content: center;
-    }
-
-    .lp-flag-btn {
-      flex: 1;
-      max-width: 140px;
-      background: #f9fafb;
-      border: 2.5px solid #e5e7eb;
-      border-radius: 20px;
-      padding: 20px 12px 16px;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-      transition:
-        border-color 0.2s,
-        background 0.2s,
-        transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
-        box-shadow 0.2s;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .lp-flag-btn:hover {
-      border-color: #7c3aed;
-      background: #faf5ff;
-      transform: translateY(-4px) scale(1.03);
-      box-shadow: 0 12px 28px rgba(124, 58, 237, 0.15);
-    }
-
-    .lp-flag-btn:active {
-      transform: translateY(0) scale(0.97);
-    }
-
-    .lp-flag-btn.selected {
-      border-color: #7c3aed;
-      background: #f5f0ff;
-      box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.12);
-    }
-
-    .lp-flag-img {
-      width: 72px;
-      height: 48px;
-      object-fit: cover;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-      display: block;
-    }
-
-    .lp-flag-label {
-      font-family: var(--font);
-      font-size: 0.88rem;
-      color: #374151;
-      line-height: 1.2;
-    }
-
-    .lp-flag-label small {
-      display: block;
-      font-size: 0.72rem;
-
-      color: #9ca3af;
-      margin-top: 2px;
-    }
-
-    .lp-confirm-btn {
-      margin-top: 24px;
-      width: 100%;
-      height: 52px;
-      background: linear-gradient(135deg, #7c3aed, #6d28d9);
-      border: none;
-      border-radius: 16px;
-      color: #fff;
-      font-family: var(--font);
-      font-size: 1rem;
-      cursor: pointer;
-      letter-spacing: -0.01em;
-      transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
-      box-shadow: 0 8px 24px rgba(124, 58, 237, 0.35);
-    }
-
-    .lp-confirm-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 32px rgba(124, 58, 237, 0.4);
-    }
-
-    .lp-confirm-btn:active {
-      transform: translateY(0) scale(0.98);
-    }
-
-    .lp-confirm-btn:disabled {
-      opacity: 0.45;
-      cursor: not-allowed;
-      transform: none;
-      box-shadow: none;
-    }
-
-    /* ===== MULTI-ACTION FAB (SPEED DIAL) ===== */
-    .fab-wrapper {
-      position: fixed;
-      bottom: 24px;
-      right: 20px;
-      z-index: 9990;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 16px;
-      transition: opacity 0.3s ease;
-      pointer-events: none;
-    }
-
-    .fab-wrapper.hide {
-      opacity: 0;
-      pointer-events: none;
-      transform: translateY(20px);
-    }
-
-    .fab-main-btn {
-      pointer-events: auto;
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #7c3aed, #6d28d9);
-      color: white;
-      border: none;
-      box-shadow: 0 8px 24px rgba(124, 58, 237, 0.45);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s;
-      z-index: 2;
-      display: none !important;
-    }
-
-    .fab-main-btn:active {
-      transform: scale(0.92);
-    }
-
-    .fab-wrapper.open .fab-main-btn {
-      transform: rotate(45deg) scale(1.1);
-      background: var(--surface);
-      color: var(--primary);
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
-    }
-
-    .fab-main-btn .material-symbols-outlined {
-      font-size: 32px;
-      font-variation-settings: 'wght' 600;
-    }
-
-    .fab-menu {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 12px;
-      visibility: hidden;
-      opacity: 0;
-      transform: translateY(20px) scale(0.8);
-      transform-origin: bottom right;
-      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .fab-wrapper.open .fab-menu {
-      visibility: visible;
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
-
-    .fab-action {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      cursor: pointer;
-      transition: transform 0.2s;
-      pointer-events: auto;
-    }
-
-    .fab-action:active {
-      transform: scale(0.95);
-    }
-
-    .fab-label {
-      background: var(--surface);
-      color: var(--text);
-      padding: 6px 14px;
-      border-radius: 12px;
-      font-size: 0.75rem;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-      white-space: nowrap;
-      pointer-events: none;
-    }
-
-    .fab-sub-btn {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
-    }
-
-    .fab-sub-btn .material-symbols-outlined {
-      font-size: 24px;
-    }
-
-    /* Staggered animation for menu items */
-    .fab-wrapper.open .fab-action:nth-child(3) {
-      transition-delay: 0.05s;
-    }
-
-    .fab-wrapper.open .fab-action:nth-child(2) {
-      transition-delay: 0.1s;
-    }
-
-    .fab-wrapper.open .fab-action:nth-child(1) {
-      transition-delay: 0.15s;
-    }
-  </style>
 </head>
 
 <body>
@@ -372,7 +38,7 @@
       </div>
 
       <img src="fundoinvisivel.png" alt="ViewGo" class="lp-logo">
-      <div class="lp-title">Agenda ViewGo</div>
+      <div class="lp-title">Template ViewGo</div>
       <p class="lp-subtitle">Escolha seu idioma &nbsp;/&nbsp; Choose your language</p>
 
       <div class="lp-flags">
@@ -409,8 +75,8 @@
         <div class="login-logo">
           <img src="fundoinvisivel.png" class="loginImg" alt="Logo">
         </div>
-        <div class="login-title">Agenda ViewGo</div>
-        <p class="login-sub" id="login-description" data-i18n="login_title">Sua agenda de trabalho inteligente</p>
+        <div class="login-title">Template ViewGo</div>
+        <p class="login-sub" id="login-description" data-i18n="login_title">Template de exemplo</p>
       </div>
 
       <!-- Bottom Form Container -->
@@ -646,7 +312,7 @@
         <div class="logo-area" style="display: flex; align-items: center; overflow: hidden; cursor: pointer;"
           onclick="window.toggleSidebar()">
           <img id="logoMarca" src="fundoinvisivel.png" alt="Logo">
-          <div class="menu-brand-name" style="margin-left: 15px; white-space: nowrap;">Agenda ViewGo</div>
+          <div class="menu-brand-name" style="margin-left: 15px; white-space: nowrap;">Template ViewGo</div>
         </div>
         <button id="btn-close-menu" class="btn btn-ghost btn-icon mobile-only">
           <span class="material-symbols-outlined">close</span>
@@ -659,28 +325,6 @@
             <span data-i18n="btn_go_home">Início (Hoje)</span>
           </button>
 
-          <button id="btn-new-event" class="btn btn-outline btn-full" data-i18n-attr="title" data-i18n="btn_new_title"
-            title="Novo Evento">
-            <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#000000">
-              <path
-                d="M680-80v-120H560v-80h120v-120h80v120h120v80H760v120h-80Zm-480-80q-33 0-56.5-23.5T120-240v-480q0-33 23.5-56.5T200-800h40v-80h80v80h240v-80h80v80h40q33 0 56.5 23.5T760-720v244q-20-3-40-3t-40 3v-84H200v320h280q0 20 3 40t11 40H200Zm0-480h480v-80H200v80Zm0 0v-80 80Z" />
-            </svg>
-            <span data-i18n="btn_new">Novo Evento</span>
-          </button>
-
-          <button id="btn-new-transaction-side" class="btn btn-outline btn-full" style="margin-bottom: 10px;">
-            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
-              <path
-                d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v240H160v240h400v80H160Zm0-480h640v-80H160v80ZM760-80v-120H640v-80h120v-120h80v120h120v80H840v120h-80ZM160-240v-480 480Z" />
-            </svg>
-
-
-            <span data-i18n="btn_new_transaction">Adicionar uma nova transação</span>
-          </button>
-          <button id="btn-agent-side" class="btn btn-outline btn-full" style="margin-bottom: 10px;">
-            <span class="material-symbols-outlined" style="font-size: 18px; margin-right: 6px;">smart_toy</span>
-            <span data-i18n="agent_fab">Agente AI</span>
-          </button>
 
 
           <button id="btn-lang-picker" class="btn btn-outline btn-full" style="margin-bottom: 10px;">
@@ -698,40 +342,10 @@
               style="margin-right:8px;">volume_off</span>
             <span data-i18n="btn_sound_title">Sons</span>
           </button>
-          <button id="btn-open-scale" class="btn btn-outline btn-full">
-            <span class="material-symbols-outlined" style="margin-right:8px;">calendar_month</span>
-            <span data-i18n="btn_scale">Minha Escala</span>
-          </button>
-          <button style="margin-bottom: 10px; margin-top: 10px;" id="btn-open-finances"
-            class="btn btn-outline btn-full">
-            <span class="material-symbols-outlined" style="margin-right:8px;">payments</span>
-            <span data-i18n="finance_title">Finanças</span>
-          </button>
-          <button id="btn-toggle-global-finance" class="btn btn-outline btn-full" style="margin-bottom: 10px;">
-            <div id="icon-finance-visible" style="margin-right:8px; display: flex; align-items:center;">
-              <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px"
-                fill="currentColor">
-                <path
-                  d="M320-414v-306h120v306l-60-56-60 56Zm200 60v-526h120v406L520-354ZM120-216v-344h120v224L120-216Zm0 98 258-258 142 122 224-224h-64v-80h200v200h-80v-64L524-146 382-268 232-118H120Z" />
-              </svg>
-            </div>
-            <div id="icon-finance-hidden" class="hidden"
-              style="margin-right:8px; display: flex; align-items:center; opacity: 0.5;">
-              <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px"
-                fill="currentColor">
-                <path
-                  d="M320-414v-306h120v306l-60-56-60 56Zm200 60v-526h120v406L520-354ZM120-216v-344h120v224L120-216Zm0 98 258-258 142 122 224-224h-64v-80h200v200h-80v-64L524-146 382-268 232-118H120Z" />
-              </svg>
-            </div>
-            <span data-i18n="btn_toggle_finance">Resumo Financeiro</span>
-          </button>
 
-          <div style="flex: 1;"></div>
-          <button id="btn-admin-panel" class="btn btn-outline btn-full hidden"
-            style="margin-bottom: 10px; border-color: #7c3aed; color: #7c3aed;">
-            <span class="material-symbols-outlined" style="margin-right:8px;">admin_panel_settings</span>
-            <span>Painel Admin</span>
-          </button>
+
+
+
 
           <button id="btn-logout" class="btn btn-outline btn-full" data-i18n-attr="title" data-i18n="btn_logout_title"
             title="Sair" style="justify-content: center;">
@@ -792,7 +406,7 @@
 
           <p
             style="text-align: center; font-size: 0.7rem; color: var(--text3); margin-top: 20px; margin-bottom: 100px;">
-            ViewGo Agenda v1.0
+            ViewGo Template v1.0
           </p>
         </div>
       </div>
@@ -817,27 +431,18 @@
 
 
 
-          <div class="scale-left">
-            <button id="btn-scale-settings" class="btn btn-ghost-violet btn-sm">
-              <span class="material-symbols-outlined" style="font-size: 18px; margin-right: 4px;">calendar_month</span>
-              <span id="scale-display">--</span>
-            </button>
-          </div>
 
           <div class="header-center" style="display: flex; align-items: center; gap: 8px;">
             <div class="view-switcher">
               <button id="btn-view-month" class="view-btn active">
                 <span class="material-symbols-outlined" style="font-size: 18px;">calendar_view_month</span>
-                <span data-i18n="btn_month">Mês</span>
+                <span data-i18n="btn_month">tab01</span>
               </button>
               <button id="btn-view-year" class="view-btn">
                 <span class="material-symbols-outlined" style="font-size: 18px;">grid_view</span>
-                <span data-i18n="btn_year">Ano</span>
+                <span data-i18n="btn_year">tab02</span>
               </button>
-              <button id="btn-view-ai" class="view-btn">
-                <span class="material-symbols-outlined" style="font-size: 18px;">smart_toy</span>
-                <span data-i18n="btn_ai">IA</span>
-              </button>
+
             </div>
           </div>
 
@@ -846,22 +451,7 @@
               <span id="shortcut-icon-sound-on" class="material-symbols-outlined">volume_up</span>
               <span id="shortcut-icon-sound-off" class="material-symbols-outlined hidden">volume_off</span>
             </button>
-            <button id="btn-shortcut-finance" class="btn btn-ghost btn-icon" title="Financeiro">
-              <div id="shortcut-icon-finance-on">
-                <svg xmlns="http://www.w3.org/2000/svg" height="22px" viewBox="0 -960 960 960" width="22px"
-                  fill="currentColor">
-                  <path
-                    d="M320-414v-306h120v306l-60-56-60 56Zm200 60v-526h120v406L520-354ZM120-216v-344h120v224L120-216Zm0 98 258-258 142 122 224-224h-64v-80h200v200h-80v-64L524-146 382-268 232-118H120Z" />
-                </svg>
-              </div>
-              <div id="shortcut-icon-finance-off" class="hidden" style="opacity: 0.5;">
-                <svg xmlns="http://www.w3.org/2000/svg" height="22px" viewBox="0 -960 960 960" width="22px"
-                  fill="currentColor">
-                  <path
-                    d="M320-414v-306h120v306l-60-56-60 56Zm200 60v-526h120v406L520-354ZM120-216v-344h120v224L120-216Zm0 98 258-258 142 122 224-224h-64v-80h200v200h-80v-64L524-146 382-268 232-118H120Z" />
-                </svg>
-              </div>
-            </button>
+
           </div>
         </div>
 
@@ -871,98 +461,126 @@
       <!-- MAIN CALENDAR -->
       <main id="main-content" class="main-content">
 
-        <!-- MONTH VIEW -->
-        <div id="view-month" class="cal-view active">
-          <div class="cal-nav">
-            <button id="btn-today" class="btn btn-ghost btn-sm-text" data-i18n="btn_today"
-              style="font-size: 18px;">Hoje</button>
-            <div class="cal-nav-btns">
-              <button id="btn-prev-month" class="btn btn-ghost btn-icon-sm">
-                <span class="material-symbols-outlined">chevron_left</span>
-              </button>
+        <!-- TAB 01: COMPONENT LIBRARY -->
+        <div id="view-month" class="cal-view active" style="padding: 24px; overflow-y: auto;">
+          <div style="max-width: 900px; margin: 0 auto;">
 
-              <div id="month-title" class="cal-title"></div>
+            <section style="margin-bottom: 40px;">
+              <h2
+                style="font-size: 1.5rem; margin-bottom: 16px; border-bottom: 2px solid var(--primary-lt); padding-bottom: 8px;">
+                Botões & Ações</h2>
+              <div style="display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 20px;">
+                <button class="btn btn-primary">Primary Button</button>
+                <button class="btn btn-outline">Outline Button</button>
+                <button class="btn btn-ghost">Ghost Button</button>
+                <button class="btn btn-danger">Danger Button</button>
+              </div>
+              <div style="display: flex; flex-wrap: wrap; gap: 12px;">
+                <button class="btn btn-primary btn-icon"><span class="material-symbols-outlined">add</span></button>
+                <button class="btn btn-outline btn-icon-sm"><span class="material-symbols-outlined">edit</span></button>
+                <button class="btn btn-ghost btn-icon-sm"><span class="material-symbols-outlined">delete</span></button>
+              </div>
+            </section>
 
-              <button id="btn-next-month" class="btn btn-ghost btn-icon-sm">
-                <span class="material-symbols-outlined">chevron_right</span>
-              </button>
-            </div>
-          </div>
-          <!-- FINANCE GLOBAL SUMMARY -->
-          <div id="finance-global-summary-container" style="position: relative;">
-            <button id="btn-close-global-finance" class="btn btn-ghost btn-icon-sm"
-              style="position: absolute; top: 8px; right: 2px; width: 24px; height: 24px; padding: 0;">
-              <span class="material-symbols-outlined" style="font-size: 14px; color: var(--text3);">close</span>
-            </button>
-            <div id="finance-global-summary" class="finance-summary-grid"
-              style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 10px 14px; padding-right: 28px; background: var(--surface); border-bottom: 1px solid var(--border);">
-              <div
-                style="background: #eef2ff; padding: 8px; border-radius: 12px; text-align: center; border: 1px solid #c7d2fe;">
-                <div style="font-size: 0.9rem; color: #4338ca; text-transform: uppercase; " data-i18n="finance_income">
-                  Receitas</div>
-                <div id="glb-total-income" style="font-size: 1.1rem;  color: #1e1b4b; line-height: 1;">
-                  R$ 0,00</div>
+            <section style="margin-bottom: 40px;">
+              <h2
+                style="font-size: 1.5rem; margin-bottom: 16px; border-bottom: 2px solid var(--primary-lt); padding-bottom: 8px;">
+                Cards de Exemplo</h2>
+              <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px;">
+
+                <!-- Event Card -->
+                <div class="event-item">
+                  <div class="event-stripe" style="background:#3b82f6"></div>
+                  <div class="event-body">
+                    <div class="event-title">Aula de Matemática</div>
+                    <div class="event-meta">
+                      <span class="material-symbols-outlined" style="font-size:16px;">schedule</span>
+                      <span>08:00 - 10:00</span>
+                    </div>
+                    <div class="event-description">Revisão de Geometria Analítica para o concurso.</div>
+                  </div>
+                  <div class="event-actions">
+                    <button class="btn btn-ghost btn-icon-sm"><span class="material-symbols-outlined"
+                        style="font-size:20px;">edit</span></button>
+                  </div>
+                </div>
+
+                <!-- Finance Card -->
+                <div class="finance-item"
+                  style="display:flex; align-items:center; gap:12px; padding: 12px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; cursor:pointer;">
+                  <div
+                    style="background:#dcfce7; color:#16a34a; width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center;">
+                    <span class="material-symbols-outlined" style="font-size:20px;">trending_up</span>
+                  </div>
+                  <div style="flex:1;">
+                    <div style="font-weight: 500;">Salário Mensal</div>
+                    <div style="font-size:0.75rem; color:var(--text3);">Receita • Pago</div>
+                  </div>
+                  <div style="text-align:right;">
+                    <div style="font-size:1rem; color:#16a34a; font-weight: 600;">+ R$ 2.500,00</div>
+                  </div>
+                </div>
+
               </div>
-              <div
-                style="background: #fff1f2; padding: 8px; border-radius: 12px; text-align: center; border: 1px solid #fecdd3;">
-                <div style="font-size: 0.9rem; color: #be123c; text-transform: uppercase; "
-                  data-i18n="finance_expenses">Despesas</div>
-                <div id="glb-total-expenses" style="font-size: 1.1rem;  color: #4c0519; line-height: 1;">R$ 0,00</div>
+            </section>
+
+            <section style="margin-bottom: 40px;">
+              <h2
+                style="font-size: 1.5rem; margin-bottom: 16px; border-bottom: 2px solid var(--primary-lt); padding-bottom: 8px;">
+                Elementos de Formulário</h2>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="field-group">
+                  <label class="field-label">Campo de Texto</label>
+                  <input class="field-input" type="text" placeholder="Digite algo..." />
+                </div>
+                <div class="field-group">
+                  <label class="field-label">Seleção</label>
+                  <select class="field-input field-select">
+                    <option>Opção 01</option>
+                    <option>Opção 02</option>
+                  </select>
+                </div>
+                <div class="field-group" style="grid-column: span 2;">
+                  <label class="field-label">Área de Texto</label>
+                  <textarea class="field-input field-textarea" placeholder="Descrição longa..." rows="3"></textarea>
+                </div>
               </div>
-              <div
-                style="background: #f0fdf4; padding: 8px; border-radius: 12px; text-align: center; border: 1px solid #bbf7d0;">
-                <div style="font-size: 0.9rem; color: #15803d; text-transform: uppercase; " data-i18n="finance_balance">
-                  Saldo</div>
-                <div id="glb-total-balance" style="font-size: 1.1rem;  color: #052e16; line-height: 1;">R$ 0,00</div>
+            </section>
+
+            <section style="margin-bottom: 40px;">
+              <h2
+                style="font-size: 1.5rem; margin-bottom: 16px; border-bottom: 2px solid var(--primary-lt); padding-bottom: 8px;">
+                Categorias</h2>
+              <div class="cat-grid">
+                <button type="button" class="cat-btn active" data-cat="evento">
+                  <span class="material-symbols-outlined"
+                    style="display:block; font-size:20px; margin-bottom:4px;">event</span>
+                  <span>Categoria 1</span>
+                </button>
+                <button type="button" class="cat-btn" data-cat="trabalho">
+                  <span class="material-symbols-outlined"
+                    style="display:block; font-size:20px; margin-bottom:4px;">work</span>
+                  <span>Categoria 2</span>
+                </button>
               </div>
-            </div>
+            </section>
+
           </div>
-          <div class="cal-weekdays" id="cal-weekdays">
-            <!-- Rendered by JS via i18n -->
-          </div>
-          <div id="month-swiper" class="month-swiper">
-            <div id="month-slides-wrapper" class="month-slides-wrapper">
-              <!-- 12 slides generated via JS for current year -->
-            </div>
-          </div>
-          <!-- Botões de navegação absoluta -->
-          <button id="btn-prev-month-abs" class="btn-nav-abs">
-            <span class="material-symbols-outlined">chevron_left</span>
-          </button>
-          <button id="btn-next-month-abs" class="btn-nav-abs">
-            <span class="material-symbols-outlined">chevron_right</span>
-          </button>
         </div>
 
         <!-- YEAR VIEW -->
         <div id="view-year" class="cal-view">
-          <div class="cal-nav" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-            <button id="btn-back-to-month" class="btn btn-ghost btn-sm-text" data-i18n="btn_back_month"
-              style="font-size: 16px; padding: 4px 8px; margin-right: 10px;">Voltar</button>
-
-            <div class="cal-nav-btns" style="flex: 1; display: flex; justify-content: end; align-items: center;">
-              <button id="btn-prev-year" class="btn btn-ghost btn-icon-sm">
-                <span class="material-symbols-outlined">chevron_left</span>
-              </button>
-
-              <div id="year-title" class="cal-title" style="width: 100px !important; text-align: center;"></div>
-              <button id="btn-next-year" class="btn btn-ghost btn-icon-sm">
-                <span class="material-symbols-outlined">chevron_right</span>
-              </button>
-            </div>
-          </div>
-          <div id="year-summary-container" class="year-summary-container">
-            <!-- Rendered by JS: Annual Totals and Chart -->
-          </div>
-          <div id="year-grid" class="year-grid"></div>
+          <h1
+            style="display: flex; width: 100%; height: 100%; text-align: center; justify-content: center; align-items: center;">
+            TAB02</h1>
         </div>
 
 
         <!-- YEAR VIEW -->
         <div id="viewAI" class="cal-view">
-          <iframe id="meuIframe" src="agent.html">
-
-          </iframe>
+          <h1
+            style="display: flex; width: 100%; height: 100%; text-align: center; justify-content: center; align-items: center;">
+            TAB03</h1>
         </div>
 
       </main>
@@ -977,7 +595,7 @@
     <div class="modal-sheet modal-sheet-auto">
       <div class="modal-handle"></div>
       <div class="modal-header">
-        <div data-i18n="modal_sound_title">Sons da Agenda</div>
+        <div data-i18n="modal_sound_title">Sons do Template de Exemplo</div>
       </div>
       <div class="modal-body text-center">
         <div
@@ -1279,8 +897,8 @@
       <div class="modal-handle"></div>
       <div class="modal-header">
         <div style="display: flex; align-items: baseline; gap: 8px;">
-          <div class="modal-title" data-i18n="search_title">Pesquisar Eventos</div>
-          <span id="events-count" class="events-count">0 <span data-i18n="events_count_zero">eventos</span></span>
+          <div class="modal-title" data-i18n="search_title">Pesquisar</div>
+          <span id="events-count" class="events-count">0 <span data-i18n="events_count_zero">Pesquisar</span></span>
         </div>
         <button id="btn-close-search" class="btn btn-ghost btn-icon-sm modal-close">
           <span class="material-symbols-outlined">close</span>

@@ -9,7 +9,7 @@ const TRANSLATIONS = {
     // ---- Login ----
     login_header_access: 'Acesso à Conta',
     login_header_register: 'Criar Nova Conta',
-    login_title: 'Sua agenda de trabalho inteligente com controle financeiro',
+    login_title: 'Seu template de exemplo',
     login_label: 'Login (7 dígitos)',
     login_placeholder: 'Digite seu ID',
     login_pass_label: 'Senha',
@@ -58,7 +58,7 @@ const TRANSLATIONS = {
     btn_go_home: 'Início (Hoje)',
     btn_new: 'Novo Evento',
     btn_new_title: 'Novo Evento',
-    btn_search_title: 'Pesquisar Eventos',
+    btn_search_title: 'Pesquisar',
     btn_sound_title: 'Sons',
     btn_logout_title: 'Sair',
     btn_lang: 'Idioma',
@@ -66,8 +66,8 @@ const TRANSLATIONS = {
     // ---- Scale Bar ----
     events_count_zero: 'eventos',
     events_count_one: 'evento',
-    btn_month: 'Mês',
-    btn_year: 'Ano',
+    btn_month: 'tab01',
+    btn_year: 'Tab02',
     btn_ai: 'IA',
     btn_back_month: 'Voltar',
 
@@ -162,9 +162,9 @@ const TRANSLATIONS = {
     btn_toggle_finance: 'Finance Bar',
 
     // ---- Search Modal ----
-    search_title: 'Pesquisar Eventos',
+    search_title: 'Pesquisar ',
     search_placeholder: 'Buscar por título, data, categoria...',
-    search_empty: 'Digite para pesquisar eventos',
+    search_empty: 'Digite para pesquisar ',
     search_no_results: 'Nenhum evento encontrado',
 
     // ---- Logout Modal ----
@@ -179,7 +179,7 @@ const TRANSLATIONS = {
     confirm_delete_desc: 'Tem certeza que deseja excluir permanentemente este evento?',
     confirm_delete_trans_desc: 'Tem certeza que deseja excluir esta transação do financeiro?',
 
-    modal_sound_title: 'Sons da Agenda',
+    modal_sound_title: 'Sons do Template de Exemplo',
     modal_sound_body: 'Deseja manter os efeitos sonoros ativos para uma experiência mais imersiva?',
     btn_sound_yes: 'Sim, manter sons',
     btn_sound_no: 'Não, desativar',
@@ -252,7 +252,7 @@ const TRANSLATIONS = {
 
     // ---- Agent ----
     agent_fab: 'Agente AI',
-    agent_intro_title: 'Agenda ViewGo, sua Agente IA',
+    agent_intro_title: 'Template ViewGo, sua Agente IA',
     agent_intro_desc: 'Sempre pronta para otimizar sua rotina e tirar suas dúvidas.',
     agent_online: 'Online e pronto para ajudar',
     agent_greeting: "Olá! Estou pronto. Diga algo como 'Folga amanhã?' ou peça ajuda.",
@@ -323,7 +323,7 @@ const TRANSLATIONS = {
     // ---- Login ----
     login_header_access: 'Account Access',
     login_header_register: 'Create New Account',
-    login_title: 'Your smart work schedule with financial control.',
+    login_title: 'Your smart sample template with financial control.',
     login_label: 'Login (7 digits)',
     login_placeholder: 'Enter your ID',
     login_pass_label: 'Password',
@@ -482,7 +482,7 @@ const TRANSLATIONS = {
     search_no_results: 'No events found',
 
     // ---- Modals ----
-    modal_sound_title: 'Agenda Sounds',
+    modal_sound_title: 'Template Sounds',
     modal_sound_body: 'Do you want to keep sound effects active for a more immersive experience?',
     btn_sound_yes: 'Yes, keep sounds',
     btn_sound_no: 'No, disable',
@@ -565,7 +565,7 @@ const TRANSLATIONS = {
 
     // ---- Agent ----
     agent_fab: 'AI Agent',
-    agent_intro_title: 'Agenda ViewGo, your AI Agent',
+    agent_intro_title: 'Template ViewGo, your AI Agent',
     agent_intro_desc: 'Always ready to optimize your routine and answer your questions.',
     agent_online: 'Online and ready to help',
     agent_greeting: "Hello! I'm ready. Ask something like 'Day off tomorrow?' or ask for help.",
