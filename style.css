@@ -1343,9 +1343,18 @@ select {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+  align-items: center;
   animation: fadeIn .2s ease;
   -webkit-backdrop-filter: blur(2px);
   backdrop-filter: blur(2px);
+  overflow-y: auto; /* Permite scroll se o modal for maior que a tela */
+}
+
+@media (min-width: 641px) {
+  .modal-overlay {
+    justify-content: flex-start; /* Alinha ao topo com margem no desktop */
+    padding: 40px 20px;
+  }
 }
 
 .modal-overlay.hidden {
@@ -1357,28 +1366,40 @@ select {
   width: 100%;
   border-radius: 24px 24px 0 0;
   box-shadow: var(--shadow-lg);
-  max-height: 92vh;
+  max-height: 90vh;
   display: flex;
   flex-direction: column;
   animation: slideUp .3s cubic-bezier(.22, .61, .36, 1);
   overflow: hidden;
   padding-bottom: var(--safe-bottom);
-  transition: transform 0.2s ease-out, padding 0.2s ease;
+  transition: all 0.2s ease-out;
   padding: 0;
 }
 
-.modal-sheet-tall {
-  max-height: 95dvh;
+/* Classes de altura específica só devem agir no Mobile para evitar bugs no Desktop */
+@media (max-width: 640px) {
+  .modal-sheet-tall {
+    max-height: 95dvh;
+  }
+  
+  .modal-sheet-full {
+    max-height: 98dvh;
+    border-radius: 20px 20px 0 0;
+  }
+  
+  .modal-sheet-auto {
+    max-height: 60dvh;
+    height: auto;
+  }
 }
 
-.modal-sheet-full {
-  max-height: 98dvh;
-  border-radius: 20px 20px 0 0;
-}
-
-.modal-sheet-auto {
-  max-height: 60dvh;
-  height: auto;
+@media (min-width: 641px) {
+  .modal-sheet {
+    max-width: 500px;
+    border-radius: 24px;
+    max-height: 80vh; /* Limite rigoroso para Desktop */
+    margin: 0 auto;
+  }
 }
 
 .modal-sheet-auto .modal-body {
@@ -3009,6 +3030,7 @@ button span {
 
 button {
   font-size: 18px !important;
+  border-radius: 0px !important;
 }
 
 /* ===== FLATPICKR CUSTOMIZATION ===== */
@@ -3160,7 +3182,9 @@ span.flatpickr-weekday {
   display: none !important;
 }
 
-.lang-toggle-btn:hover {}
+.lang-toggle-btn:hover {
+  background: var(--surface2);
+}
 
 .lang-toggle-btn:active {
   transform: scale(0.95);
@@ -3475,4 +3499,81 @@ span.flatpickr-weekday {
 
 .fab-wrapper.open .fab-action:nth-child(1) {
   transition-delay: 0.15s;
+}
+
+/* ===== LESSONS SYSTEM ===== */
+.view-btn.active {
+  background: var(--primary-lt);
+  color: var(--primary);
+  border-color: var(--primary);
+}
+
+.html-content h1,
+.html-content h2,
+.html-content h3 {
+  color: var(--text);
+  margin-top: 24px;
+  margin-bottom: 12px;
+}
+
+.html-content p {
+  margin-bottom: 16px;
+}
+
+.html-content ul,
+.html-content ol {
+  margin-bottom: 16px;
+  padding-left: 24px;
+}
+
+.html-content li {
+  margin-bottom: 8px;
+}
+
+.html-content img {
+  max-width: 100%;
+  border-radius: 12px;
+  margin: 16px 0;
+}
+
+.html-content blockquote {
+  border-left: 4px solid var(--primary);
+  padding-left: 16px;
+  font-style: italic;
+  color: var(--text2);
+  background: var(--primary-lt);
+  padding: 12px 16px;
+  border-radius: 0 8px 8px 0;
+  margin: 20px 0;
+}
+
+.html-content a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.html-content a:hover {
+  text-decoration: underline;
+}
+
+.lesson-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow);
+  border-color: var(--primary-lt);
+}
+
+@media (max-width: 640px) {
+  .lesson-detail-header {
+    padding: 8px 16px;
+  }
+
+  #view-lessons {
+    padding: 16px;
+  }
+
+  .html-content {
+    padding: 20px;
+    font-size: 0.95rem;
+  }
 }

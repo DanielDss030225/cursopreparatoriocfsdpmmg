@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="theme-color" content="#ffffff" />
-  <title>Template</title>
+  <title>CFSD PMMG - Aulas</title>
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -38,8 +38,8 @@
       </div>
 
       <img src="fundoinvisivel.png" alt="ViewGo" class="lp-logo">
-      <div class="lp-title">Template ViewGo</div>
-      <p class="lp-subtitle">Escolha seu idioma &nbsp;/&nbsp; Choose your language</p>
+      <div class="lp-title">CFSD PMMG</div>
+      <p class="lp-subtitle">Prepare-se para o sucesso!</p>
 
       <div class="lp-flags">
         <!-- Português -->
@@ -75,8 +75,8 @@
         <div class="login-logo">
           <img src="fundoinvisivel.png" class="loginImg" alt="Logo">
         </div>
-        <div class="login-title">Template ViewGo</div>
-        <p class="login-sub" id="login-description" data-i18n="login_title">Template de exemplo</p>
+        <div class="login-title">CFSD PMMG</div>
+        <p class="login-sub" id="login-description" data-i18n="login_title">Seu futuro começa aqui</p>
       </div>
 
       <!-- Bottom Form Container -->
@@ -312,7 +312,7 @@
         <div class="logo-area" style="display: flex; align-items: center; overflow: hidden; cursor: pointer;"
           onclick="window.toggleSidebar()">
           <img id="logoMarca" src="fundoinvisivel.png" alt="Logo">
-          <div class="menu-brand-name" style="margin-left: 15px; white-space: nowrap;">Template ViewGo</div>
+          <div class="menu-brand-name" style="margin-left: 15px; white-space: nowrap;">CFSD PMMG</div>
         </div>
         <button id="btn-close-menu" class="btn btn-ghost btn-icon mobile-only">
           <span class="material-symbols-outlined">close</span>
@@ -320,9 +320,16 @@
       </div>
       <div class="side-menu-content">
         <div class="header-actions">
-          <button id="btn-go-home" class="btn btn-primary btn-full" style="margin-bottom: 10px;">
-            <span class="material-symbols-outlined" style="font-size: 18px; margin-right: 6px;">home</span>
-            <span data-i18n="btn_go_home">Início (Hoje)</span>
+          <button id="btn-show-lessons" class="btn btn-primary btn-full" style="margin-bottom: 10px;"
+            onclick="setView('lessons')">
+            <span class="material-symbols-outlined" style="font-size: 18px; margin-right: 6px;">menu_book</span>
+            <span>Conteúdo (Início)</span>
+          </button>
+
+          <button id="btn-go-home" class="btn btn-outline btn-full" style="margin-bottom: 10px;"
+            onclick="setView('month')">
+            <span class="material-symbols-outlined" style="font-size: 18px; margin-right: 6px;">calendar_month</span>
+            <span>Cronograma</span>
           </button>
 
 
@@ -406,7 +413,7 @@
 
           <p
             style="text-align: center; font-size: 0.7rem; color: var(--text3); margin-top: 20px; margin-bottom: 100px;">
-            ViewGo Template v1.0
+            CFSD PMMG v1.0
           </p>
         </div>
       </div>
@@ -434,13 +441,13 @@
 
           <div class="header-center" style="display: flex; align-items: center; gap: 8px;">
             <div class="view-switcher">
-              <button id="btn-view-month" class="view-btn active">
-                <span class="material-symbols-outlined" style="font-size: 18px;">calendar_view_month</span>
-                <span data-i18n="btn_month">tab01</span>
+              <button id="btn-view-lessons" class="view-btn">
+                <span class="material-symbols-outlined" style="font-size: 18px;">menu_book</span>
+                <span>Conteúdo</span>
               </button>
-              <button id="btn-view-year" class="view-btn">
-                <span class="material-symbols-outlined" style="font-size: 18px;">grid_view</span>
-                <span data-i18n="btn_year">tab02</span>
+              <button id="btn-view-month" class="view-btn active">
+                <span class="material-symbols-outlined" style="font-size: 18px;">calendar_month</span>
+                <span>Cronograma</span>
               </button>
 
             </div>
@@ -461,63 +468,100 @@
       <!-- MAIN CALENDAR -->
       <main id="main-content" class="main-content">
 
-        <!-- TAB 01: COMPONENT LIBRARY -->
+        <!-- CRONOGRAMA VIEW -->
         <div id="view-month" class="cal-view active" style="padding: 24px; overflow-y: auto;">
           <div style="max-width: 900px; margin: 0 auto;">
 
             <section style="margin-bottom: 40px;">
-              <h2
-                style="font-size: 1.5rem; margin-bottom: 16px; border-bottom: 2px solid var(--primary-lt); padding-bottom: 8px;">
-                Botões & Ações</h2>
-              <div style="display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 20px;">
-                <button class="btn btn-primary">Primary Button</button>
-                <button class="btn btn-outline">Outline Button</button>
-                <button class="btn btn-ghost">Ghost Button</button>
-                <button class="btn btn-danger">Danger Button</button>
-              </div>
-              <div style="display: flex; flex-wrap: wrap; gap: 12px;">
-                <button class="btn btn-primary btn-icon"><span class="material-symbols-outlined">add</span></button>
-                <button class="btn btn-outline btn-icon-sm"><span class="material-symbols-outlined">edit</span></button>
-                <button class="btn btn-ghost btn-icon-sm"><span class="material-symbols-outlined">delete</span></button>
-              </div>
-            </section>
+              <h2 style="font-size: 1.5rem; margin-bottom: 4px; color: var(--text);">Cronograma de Estudo</h2>
+              <p style="color: var(--text3); font-size: 0.9rem; margin-bottom: 24px;">Organização semanal das matérias
+              </p>
 
-            <section style="margin-bottom: 40px;">
-              <h2
-                style="font-size: 1.5rem; margin-bottom: 16px; border-bottom: 2px solid var(--primary-lt); padding-bottom: 8px;">
-                Cards de Exemplo</h2>
-              <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px;">
+              <div id="weekly-schedule-grid"
+                style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px;">
 
-                <!-- Event Card -->
-                <div class="event-item">
-                  <div class="event-stripe" style="background:#3b82f6"></div>
+                <!-- SEGUNDA -->
+                <div class="event-item study-day" data-day="seg">
+                  <div class="event-stripe" style="background:#7c3aed"></div>
                   <div class="event-body">
-                    <div class="event-title">Aula de Matemática</div>
-                    <div class="event-meta">
-                      <span class="material-symbols-outlined" style="font-size:16px;">schedule</span>
-                      <span>08:00 - 10:00</span>
-                    </div>
-                    <div class="event-description">Revisão de Geometria Analítica para o concurso.</div>
+                    <div class="event-title"
+                      style="color: var(--primary); font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; margin-bottom: 8px;">
+                      Segunda-feira</div>
+                    <div class="day-text" style="color: var(--text2); line-height: 1.5; font-size: 0.95rem;">
+                      Carregando...</div>
                   </div>
-                  <div class="event-actions">
-                    <button class="btn btn-ghost btn-icon-sm"><span class="material-symbols-outlined"
-                        style="font-size:20px;">edit</span></button>
+                  <div class="event-actions admin-only hidden">
+                    <button class="btn btn-ghost btn-icon-sm" onclick="openWeeklyEditModal('seg')">
+                      <span class="material-symbols-outlined" style="font-size:20px;">edit</span>
+                    </button>
                   </div>
                 </div>
 
-                <!-- Finance Card -->
-                <div class="finance-item"
-                  style="display:flex; align-items:center; gap:12px; padding: 12px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; cursor:pointer;">
-                  <div
-                    style="background:#dcfce7; color:#16a34a; width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center;">
-                    <span class="material-symbols-outlined" style="font-size:20px;">trending_up</span>
+                <!-- TERÇA -->
+                <div class="event-item study-day" data-day="ter">
+                  <div class="event-stripe" style="background:#7c3aed"></div>
+                  <div class="event-body">
+                    <div class="event-title"
+                      style="color: var(--primary); font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; margin-bottom: 8px;">
+                      Terça-feira</div>
+                    <div class="day-text" style="color: var(--text2); line-height: 1.5; font-size: 0.95rem;">
+                      Carregando...</div>
                   </div>
-                  <div style="flex:1;">
-                    <div style="font-weight: 500;">Salário Mensal</div>
-                    <div style="font-size:0.75rem; color:var(--text3);">Receita • Pago</div>
+                  <div class="event-actions admin-only hidden">
+                    <button class="btn btn-ghost btn-icon-sm" onclick="openWeeklyEditModal('ter')">
+                      <span class="material-symbols-outlined" style="font-size:20px;">edit</span>
+                    </button>
                   </div>
-                  <div style="text-align:right;">
-                    <div style="font-size:1rem; color:#16a34a; font-weight: 600;">+ R$ 2.500,00</div>
+                </div>
+
+                <!-- QUARTA -->
+                <div class="event-item study-day" data-day="qua">
+                  <div class="event-stripe" style="background:#7c3aed"></div>
+                  <div class="event-body">
+                    <div class="event-title"
+                      style="color: var(--primary); font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; margin-bottom: 8px;">
+                      Quarta-feira</div>
+                    <div class="day-text" style="color: var(--text2); line-height: 1.5; font-size: 0.95rem;">
+                      Carregando...</div>
+                  </div>
+                  <div class="event-actions admin-only hidden">
+                    <button class="btn btn-ghost btn-icon-sm" onclick="openWeeklyEditModal('qua')">
+                      <span class="material-symbols-outlined" style="font-size:20px;">edit</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- QUINTA -->
+                <div class="event-item study-day" data-day="qui">
+                  <div class="event-stripe" style="background:#7c3aed"></div>
+                  <div class="event-body">
+                    <div class="event-title"
+                      style="color: var(--primary); font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; margin-bottom: 8px;">
+                      Quinta-feira</div>
+                    <div class="day-text" style="color: var(--text2); line-height: 1.5; font-size: 0.95rem;">
+                      Carregando...</div>
+                  </div>
+                  <div class="event-actions admin-only hidden">
+                    <button class="btn btn-ghost btn-icon-sm" onclick="openWeeklyEditModal('qui')">
+                      <span class="material-symbols-outlined" style="font-size:20px;">edit</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- SEXTA -->
+                <div class="event-item study-day" data-day="sex">
+                  <div class="event-stripe" style="background:#7c3aed"></div>
+                  <div class="event-body">
+                    <div class="event-title"
+                      style="color: var(--primary); font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; margin-bottom: 8px;">
+                      Sexta-feira</div>
+                    <div class="day-text" style="color: var(--text2); line-height: 1.5; font-size: 0.95rem;">
+                      Carregando...</div>
+                  </div>
+                  <div class="event-actions admin-only hidden">
+                    <button class="btn btn-ghost btn-icon-sm" onclick="openWeeklyEditModal('sex')">
+                      <span class="material-symbols-outlined" style="font-size:20px;">edit</span>
+                    </button>
                   </div>
                 </div>
 
@@ -527,40 +571,22 @@
             <section style="margin-bottom: 40px;">
               <h2
                 style="font-size: 1.5rem; margin-bottom: 16px; border-bottom: 2px solid var(--primary-lt); padding-bottom: 8px;">
-                Elementos de Formulário</h2>
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                <div class="field-group">
-                  <label class="field-label">Campo de Texto</label>
-                  <input class="field-input" type="text" placeholder="Digite algo..." />
-                </div>
-                <div class="field-group">
-                  <label class="field-label">Seleção</label>
-                  <select class="field-input field-select">
-                    <option>Opção 01</option>
-                    <option>Opção 02</option>
-                  </select>
-                </div>
-                <div class="field-group" style="grid-column: span 2;">
-                  <label class="field-label">Área de Texto</label>
-                  <textarea class="field-input field-textarea" placeholder="Descrição longa..." rows="3"></textarea>
-                </div>
-              </div>
-            </section>
-
-            <section style="margin-bottom: 40px;">
-              <h2
-                style="font-size: 1.5rem; margin-bottom: 16px; border-bottom: 2px solid var(--primary-lt); padding-bottom: 8px;">
-                Categorias</h2>
+                Dicas de Estudo</h2>
               <div class="cat-grid">
-                <button type="button" class="cat-btn active" data-cat="evento">
+                <button type="button" class="cat-btn active">
                   <span class="material-symbols-outlined"
-                    style="display:block; font-size:20px; margin-bottom:4px;">event</span>
-                  <span>Categoria 1</span>
+                    style="display:block; font-size:20px; margin-bottom:4px;">auto_stories</span>
+                  <span>Leitura</span>
                 </button>
-                <button type="button" class="cat-btn" data-cat="trabalho">
+                <button type="button" class="cat-btn">
                   <span class="material-symbols-outlined"
-                    style="display:block; font-size:20px; margin-bottom:4px;">work</span>
-                  <span>Categoria 2</span>
+                    style="display:block; font-size:20px; margin-bottom:4px;">quiz</span>
+                  <span>Questões</span>
+                </button>
+                <button type="button" class="cat-btn">
+                  <span class="material-symbols-outlined"
+                    style="display:block; font-size:20px; margin-bottom:4px;">history_edu</span>
+                  <span>Revisão</span>
                 </button>
               </div>
             </section>
@@ -581,6 +607,53 @@
           <h1
             style="display: flex; width: 100%; height: 100%; text-align: center; justify-content: center; align-items: center;">
             TAB03</h1>
+        </div>
+
+        <!-- LESSONS VIEW -->
+        <div id="view-lessons" class="cal-view" style="padding: 24px; overflow-y: auto;">
+          <div style="max-width: 1200px; margin: 0 auto;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px;">
+              <div>
+                <h2 style="font-size: 1.75rem; color: var(--text); margin-bottom: 4px;">Aulas & Conteúdos</h2>
+                <p style="color: var(--text3); font-size: 0.9rem;">Sua jornada rumo à aprovação</p>
+              </div>
+              <button id="btn-add-lesson" class="btn btn-primary hidden" onclick="openLessonModal()">
+                <span class="material-symbols-outlined" style="margin-right: 8px;">add_circle</span>
+                Adicionar Novo Conteúdo
+              </button>
+            </div>
+
+            <div id="lessons-grid"
+              style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px;">
+              <!-- Cards serão inseridos aqui via JS -->
+            </div>
+
+            <div id="lessons-empty" class="hidden" style="text-align: center; padding: 60px 20px;">
+              <span class="material-symbols-outlined"
+                style="font-size: 64px; color: var(--border2); margin-bottom: 16px;">history_edu</span>
+              <h3 style="color: var(--text2);">Nenhum conteúdo disponível ainda.</h3>
+              <p style="color: var(--text3);">Fique atento às atualizações do curso.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- LESSON DETAIL VIEW -->
+        <div id="view-lesson-detail" class="cal-view" style="padding: 0; overflow-y: auto; background: var(--bg);">
+          <div class="lesson-detail-header"
+            style="position: sticky; top: 0; background: var(--surface); border-bottom: 1px solid var(--border); z-index: 10; padding: 12px 24px; display: flex; align-items: center; gap: 16px;">
+            <button class="btn btn-ghost btn-icon-sm" onclick="setView('lessons')">
+              <span class="material-symbols-outlined">arrow_back</span>
+            </button>
+            <div style="flex: 1;">
+              <h3 id="lesson-detail-title" style="font-size: 1.1rem; color: var(--text); margin: 0;">Título da Aula</h3>
+            </div>
+          </div>
+
+          <div style="width: 100%; height: calc(100vh - 54px); background: var(--surface); overflow: hidden;">
+            <div id="lesson-detail-content" class="html-content" style="width: 100%; height: 100%;">
+              <!-- O iframe injetado ocupará 100% deste espaço -->
+            </div>
+          </div>
         </div>
 
       </main>
@@ -619,110 +692,7 @@
   <!-- ===== MODAL LOGOUT ===== -->
 
   <!-- SCALE SETUP MODAL -->
-  <div id="modal-scale" class="modal-overlay hidden">
-    <div class="modal-sheet">
-      <div class="modal-handle"></div>
-      <div class="modal-header">
-        <div class="modal-title" data-i18n="scale_modal_title">Configurar Escala</div>
-        <button id="btn-close-scale" class="btn btn-ghost btn-icon-sm modal-close" onclick="closeModal('modal-scale')">
-          <span class="material-symbols-outlined">close</span>
-        </button>
-      </div>
-
-      <div class="modal-body" id="scale-modal-body">
-        <div id="scale-step-initial">
-          <p class="modal-desc" data-i18n="scale_desc">Configure seu padrão (Padrão Semanal ou Presets).</p>
-
-          <div class="field-group" style="display: none;">
-            <label class="field-label" data-i18n="scale_presets_label">Presets Comuns</label>
-            <div class="cat-grid" style="grid-template-columns: 1fr 1fr; gap: 8px;">
-              <button type="button" class="btn btn-outline btn-sm-text" onclick="applyPreset('4_serv')"
-                style="display: none;">4-Serv. (4ª
-                1º)</button>
-              <button type="button" class="btn btn-outline btn-sm-text" onclick="applyPreset('5_serv')"
-                style="display: none;">5-Serv. (4ª
-                1º)</button>
-              <button type="button" class="btn btn-outline btn-sm-text"
-                onclick="applyPreset('dobradinha')">Dobradinha</button>
-              <button type="button" class="btn btn-outline btn-sm-text" onclick="applyPreset('12x36')">12/36</button>
-              <button type="button" class="btn btn-outline btn-sm-text" onclick="applyPreset('admin')"
-                style="display: none;">Administrativo</button>
-
-              <button type="button" class="btn btn-outline btn-sm-text" onclick="applyPreset('24x72')"
-                style="display: none;">24/72</button>
-            </div>
-          </div>
-
-
-
-
-          <div class="scale-preview-wrap"
-            style="height: auto; overflow-y: auto; margin-top: 10px; padding-bottom: 20px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--bg); margin-bottom: 10px;">
-            <div id="scale-weekday-grid" style="margin-bottom: 10px; padding-top: 10px;"></div>
-
-            <div class="field-group" style="padding: 0 16px; display: none;">
-              <label class="field-label" style="text-align: center; display: block; opacity: 0.7;">Tamanho do
-                Ciclo</label>
-              <div style="display: flex; gap: 8px;">
-                <button type="button" class="btn btn-outline btn-sm flex-1" onclick="modifyWeeks(-1)">
-                  <span class="material-symbols-outlined" style="font-size: 18px;">remove</span> Semana
-                </button>
-                <button type="button" class="btn btn-outline btn-sm flex-1" onclick="modifyWeeks(1)">
-                  <span class="material-symbols-outlined" style="font-size: 18px;">add</span> Semana
-                </button>
-              </div>
-
-
-            </div>
-
-          </div>
-
-          <div style="background: var(--surface); padding: 16px; border-radius: 16px; border: 1px solid var(--border);">
-            <div data-i18n="tutorial_title"
-              style="margin: 0 0 12px; font-size: 0.8rem;  color: var(--text2); letter-spacing: 0.5px;">
-              Dicas de uso</div>
-
-            <!-- Dots Legend -->
-            <div style="display: flex; gap: 16px; margin-bottom: 16px;">
-              <div style="display: flex; align-items: center; gap: 6px;">
-                <div
-                  style="width: 8px; height: 8px; border-radius: 50%; background: #dc2626; box-shadow: 0 0 4px rgba(220, 38, 38, 0.4);">
-                </div>
-                <span data-i18n="tutorial_work_dot" style="font-size: 0.75rem; color: var(--text2);">Trabalho</span>
-              </div>
-              <div style="display: flex; align-items: center; gap: 6px;">
-                <div
-                  style="width: 8px; height: 8px; border-radius: 50%; background: #16a34a; box-shadow: 0 0 4px rgba(22, 163, 74, 0.4);">
-                </div>
-                <span data-i18n="tutorial_off_dot" style="font-size: 0.75rem; color: var(--text2);">Folga</span>
-              </div>
-            </div>
-
-            <div style="display: flex; flex-direction: column; gap: 10px;">
-              <div style="display: flex; align-items: center; gap: 10px;">
-                <span class="material-symbols-outlined" style="font-size: 18px; color: var(--primary);">touch_app</span>
-                <p class="scale-hint" data-i18n="scale_hint">* Clique nos dias para ajustar.</p>
-              </div>
-              <div style="display: flex; align-items: center; gap: 10px;">
-
-
-              </div>
-            </div>
-          </div>
-          <p id="scale-error" class="form-error" style="text-align: center; margin-top: 8px; "></p>
-          <div class="modal-footer">
-            <button id="btn-clear-seq" class="btn btn-ghost btn-sm" data-i18n="btn_clear">Limpar</button>
-            <button type="button" class="btn btn-ghost btn-sm" onclick="closeModal('modal-scale')"
-              data-i18n="scale_configure_later">Configurar
-              depois</button>
-            <button id="btn-save-scale" class="btn btn-primary flex-1" disabled data-i18n="btn_save_scale">Salvar
-              Escala</button>
-          </div>
-
-        </div>
-      </div>
-    </div>
-  </div>
+  <!-- Removida Seção de Escala legada -->
 
   <!-- DAY DETAILS MODAL -->
   <div id="modal-day" class="modal-overlay hidden">
@@ -1004,7 +974,104 @@
     </div>
   </div>
 
+  <!-- WEEKLY PLANNER EDIT MODAL (Admin Only) -->
+  <div id="modal-weekly-edit" class="modal-overlay hidden" style="z-index: 11005;">
+    <div class="modal-sheet modal-sheet-auto">
+      <div class="modal-handle"></div>
+      <div class="modal-header">
+        <div id="weekly-edit-title" class="modal-title">Editar Planejamento</div>
+        <button class="btn btn-ghost btn-icon-sm modal-close" onclick="closeModal('modal-weekly-edit')">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="weekly-edit-form">
+          <input type="hidden" id="edit-day-key" />
+          <div class="field-group">
+            <label class="field-label" id="edit-day-label">Conteúdo para Segunda-feira</label>
+            <textarea id="edit-day-text" class="field-input field-textarea" rows="5"
+              placeholder="Digite o que estudar hoje..."></textarea>
+          </div>
+          <div class="modal-footer" style="margin-top: 20px;">
+            <button type="button" class="btn btn-outline" onclick="closeModal('modal-weekly-edit')">Cancelar</button>
+            <button type="submit" class="btn btn-primary flex-1">Salvar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 
+  <!-- WEEKLY PLANNER VIEW MODAL (Standard User) -->
+  <div id="modal-weekly-view" class="modal-overlay hidden" style="z-index: 11005;">
+    <div class="modal-sheet modal-sheet-tall">
+      <div class="modal-handle"></div>
+      <div class="modal-header">
+        <div id="weekly-view-title" class="modal-title" style="color: var(--primary);">Detalhes do Estudo</div>
+        <button class="btn btn-ghost btn-icon-sm modal-close" onclick="closeModal('modal-weekly-view')">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="modal-body modal-scroll">
+        <div id="weekly-view-day" style="font-weight: 600; color: var(--text); margin-bottom: 12px; font-size: 1.1rem;">
+          Segunda-feira</div>
+        <div id="weekly-view-content" class="html-content"
+          style="color: var(--text2); line-height: 1.6; white-space: pre-wrap; background: var(--bg); padding: 20px; border-radius: 16px; border: 1px solid var(--border);">
+          <!-- Conteúdo completo aqui -->
+        </div>
+        <div class="modal-footer" style="margin-top: 24px;">
+          <button type="button" class="btn btn-primary btn-full"
+            onclick="closeModal('modal-weekly-view')">Entendido</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LESSON FORM MODAL -->
+  <div id="modal-lesson" class="modal-overlay hidden" style="z-index: 11000;">
+    <div class="modal-sheet modal-sheet-tall">
+      <div class="modal-handle"></div>
+      <div class="modal-header">
+        <div id="lesson-modal-title" class="modal-title">Novo Conteúdo</div>
+        <button class="btn btn-ghost btn-icon-sm modal-close" onclick="closeModal('modal-lesson')">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="lesson-form" autocomplete="off">
+          <input type="hidden" id="lesson-id" />
+
+          <div class="field-group">
+            <label class="field-label">Título do Conteúdo *</label>
+            <input id="lesson-title" class="field-input" type="text" placeholder="Ex: PDF Aula 01 ou Site de Estudos"
+              required />
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">Thumbnail (URL da Imagem)</label>
+            <input id="lesson-thumb" class="field-input" type="text" placeholder="https://exemplo.com/imagem.jpg" />
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">Link do Conteúdo (URL) *</label>
+            <input id="lesson-html" class="field-input" type="text" placeholder="https://exemplo.com/seu-pdf-ou-site"
+              required />
+            <p style="font-size: 0.7rem; color: var(--text3); margin-top: 4px;">Cole apenas o link. O sistema criará o
+              Iframe automaticamente.</p>
+          </div>
+
+          <!-- Removido o campo de vídeo separado para simplificar conforme solicitado -->
+          <input id="lesson-video-id" type="hidden" value="iframe_mode" />
+
+          <p id="lesson-error" class="form-error hidden"></p>
+
+          <div class="modal-footer" style="margin-top: 24px;">
+            <button type="button" class="btn btn-outline" onclick="closeModal('modal-lesson')">Cancelar</button>
+            <button type="submit" class="btn btn-primary flex-1">Salvar Conteúdo</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 
   <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -1347,6 +1414,10 @@
             if (typeof window.closeAnyModal === 'function') window.closeAnyModal();
             if (typeof window.openTransactionForm === 'function') window.openTransactionForm(new Date());
             break;
+          case 'lesson':
+            if (typeof window.closeAnyModal === 'function') window.closeAnyModal();
+            if (typeof window.openLessonModal === 'function') window.openLessonModal();
+            break;
         }
       }, 200);
     };
@@ -1377,6 +1448,14 @@
         <span class="fab-label" data-i18n="btn_new">Novo Evento</span>
         <div class="fab-sub-btn" style="background: #3b82f6;">
           <span class="material-symbols-outlined">event</span>
+        </div>
+      </div>
+
+      <!-- Sub Action: Nova Aula (Admin Only) -->
+      <div id="fab-action-lesson" class="fab-action hidden" onclick="handleFabAction('lesson')">
+        <span class="fab-label">Adicionar Aula</span>
+        <div class="fab-sub-btn" style="background: var(--primary-dk);">
+          <span class="material-symbols-outlined">menu_book</span>
         </div>
       </div>
 

@@ -9,7 +9,7 @@ const TRANSLATIONS = {
     // ---- Login ----
     login_header_access: 'Acesso à Conta',
     login_header_register: 'Criar Nova Conta',
-    login_title: 'Seu template de exemplo',
+    login_title: 'Sua jornada rumo à aprovação!',
     login_label: 'Login (7 dígitos)',
     login_placeholder: 'Digite seu ID',
     login_pass_label: 'Senha',

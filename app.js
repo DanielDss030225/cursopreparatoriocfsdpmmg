@@ -24,23 +24,22 @@ const db = firebase.database();
 // ======================== STATE ========================
 const S = {
     currentUser: null,
-    userScale: null,
     events: [],
     transactions: [],
     soundsEnabled: true,
     currentDate: new Date(),
     selectedDate: null,
     viewMode: 'month',
-    customSeq: [],
     editingEventId: null,
-    forceScale: false,
     lastRenderedYear: null,
     lastModalClose: 0,
     financeType: 'expense',
     editingTransactionId: null,
     editingOccurrenceDate: null,
     showGlobalFinance: localStorage.getItem('agbizu_show_global_finance') !== 'false',
-    sessionStartTime: Date.now()
+    sessionStartTime: Date.now(),
+    lessons: [],
+    weeklyPlanner: {}
 };
 
 // ======================== STATS TRACKING ========================
@@ -173,7 +172,7 @@ function showLoading(msgKey = 'loading_wait') {
         el = document.createElement('div');
         el.id = 'firebase-loading';
         el.style.cssText = `position:fixed;inset:0;background:#ffffff;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:99999;gap:14px;font-family:var(--font);`;
-        el.innerHTML = `<img class="imgGif" src="aberturaGif.gif" ><p id="fb-load-msg" style="color:#374151;font-size:.95rem; margin-top:10px;">${msg}</p>`;
+        el.innerHTML = `<img class="imgGif" src="icone.png" ><p id="fb-load-msg" style="color:#374151;font-size:.95rem; margin-top:10px;">${msg}</p>`;
         document.body.appendChild(el);
     } else {
         document.getElementById('fb-load-msg').textContent = msg;
@@ -225,6 +224,21 @@ function startRealtimeSync() {
             if (!$('modal-finances').classList.contains('hidden')) updateFinanceUI();
             S.lastRenderedYear = null;
             refreshCalendar();
+        });
+
+        // Sincronizar aulas (público) - Usando uma ref global
+        db.ref('lessons').on('value', (snap) => {
+            console.log("[DEBUG] Sincronizando aulas...");
+            const raw = snap.exists() ? snap.val() : {};
+            S.lessons = Object.entries(raw).map(([k, v]) => ({ id: k, ...v }));
+            if (S.viewMode === 'lessons') renderLessonsView();
+        });
+
+        // Sincronizar Cronograma Semanal
+        db.ref('weekly_planner').on('value', (snap) => {
+            console.log("[DEBUG] Sincronizando cronograma semanal...");
+            S.weeklyPlanner = snap.val() || {};
+            renderWeeklyPlanner();
         });
     } catch (e) {
         console.error("Error in startRealtimeSync:", e);
@@ -563,10 +577,20 @@ firebase.auth().onAuthStateChanged(async (user) => {
 
         // Check for Admin
         if (user.email === 'maispraticodesenvolvimento@gmail.com') {
-            const btn = document.getElementById('btn-admin-panel');
-            if (btn) {
-                btn.classList.remove('hidden');
-                btn.onclick = () => window.location.href = 'adm.html';
+            const btnAdd = document.getElementById('btn-add-lesson');
+            if (btnAdd) btnAdd.classList.remove('hidden');
+
+            const fabAdd = document.getElementById('fab-action-lesson');
+            if (fabAdd) fabAdd.classList.remove('hidden');
+
+            // Mostrar botões de edição do cronograma semanal
+            document.querySelectorAll('.admin-only').forEach(el => el.classList.remove('hidden'));
+
+            // Também mostrar painel adm se existir
+            const btnAdm = document.getElementById('btn-admin-panel');
+            if (btnAdm) {
+                btnAdm.classList.remove('hidden');
+                btnAdm.onclick = () => window.location.href = 'adm.html';
             }
         }
 
@@ -599,7 +623,7 @@ function initApp() {
         }
 
         S.currentDate = new Date();
-        setView('month');
+        setView('lessons');
         startRealtimeSync();
 
         hide('login-screen');
@@ -1395,17 +1419,59 @@ function renderYearView() {
 function setView(mode) {
     S.viewMode = mode;
     // Update view containers visibility
-    const views = { 'month': $('view-month'), 'year': $('view-year'), 'ai': $('viewAI') };
+    const views = {
+        'month': $('view-month'),
+        'year': $('view-year'),
+        'ai': $('viewAI'),
+        'lessons': $('view-lessons'),
+        'lesson-detail': $('view-lesson-detail')
+    };
     Object.keys(views).forEach(k => {
         if (views[k]) views[k].classList.toggle('active', mode === k);
     });
 
     // Update button active state
-    const btns = { 'month': $('btn-view-month'), 'year': $('btn-view-year'), 'ai': $('btn-view-ai') };
-    Object.keys(btns).forEach(k => {
-        if (btns[k]) btns[k].classList.toggle('active', mode === k);
+    const lessonBtns = [$('btn-view-lessons'), $('btn-show-lessons')];
+    const monthBtns = [$('btn-view-month'), $('btn-go-home')];
+
+    lessonBtns.forEach(b => {
+        if (b) {
+            b.classList.toggle('active', mode === 'lessons');
+            b.classList.toggle('btn-primary', mode === 'lessons');
+            b.classList.toggle('btn-outline', mode !== 'lessons');
+        }
     });
 
+    monthBtns.forEach(b => {
+        if (b) {
+            b.classList.toggle('active', mode === 'month');
+            b.classList.toggle('btn-primary', mode === 'month');
+            b.classList.toggle('btn-outline', mode !== 'month');
+        }
+    });
+
+    const otherBtns = {
+        'year': $('btn-view-year'),
+        'ai': $('btn-view-ai')
+    };
+    Object.keys(otherBtns).forEach(k => {
+        if (otherBtns[k]) otherBtns[k].classList.toggle('active', mode === k);
+    });
+
+    // Ensure admin elements are visible if admin is logged in
+    const isAdmin = firebase.auth().currentUser?.email === 'maispraticodesenvolvimento@gmail.com';
+    const btnAdd = document.getElementById('btn-add-lesson');
+    if (btnAdd) {
+        if (isAdmin) btnAdd.classList.remove('hidden');
+        else btnAdd.classList.add('hidden');
+    }
+    
+    if (isAdmin) {
+        document.querySelectorAll('.admin-only').forEach(el => el.classList.remove('hidden'));
+    }
+
+    if (mode === 'lessons') renderLessonsView();
+    if (mode === 'month') renderWeeklyPlanner();
     refreshCalendar();
 }
 
@@ -2114,7 +2180,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const btnNewEv = $('btn-new-event');
     if (btnNewEv) btnNewEv.onclick = () => { window.closeAnyModal(); S.selectedDate = new Date(); openEventForm(); };
-    
+
     const btnNewTrans = $('btn-new-transaction-side');
     if (btnNewTrans) btnNewTrans.onclick = () => { window.closeAnyModal(); window.openTransactionForm(new Date()); };
 
@@ -2142,6 +2208,7 @@ document.addEventListener('DOMContentLoaded', () => {
     $('btn-lang-picker').onclick = () => { window.closeAnyModal(); window.openLangPicker(); };
 
     if ($('btn-open-scale')) $('btn-open-scale').onclick = () => { toggleSideMenu(false); openScaleModal(); };
+    if ($('btn-view-lessons')) $('btn-view-lessons').onclick = () => setView('lessons');
     if ($('btn-view-month')) $('btn-view-month').onclick = () => setView('month');
     if ($('btn-view-year')) $('btn-view-year').onclick = () => setView('year');
     if ($('btn-view-ai')) $('btn-view-ai').onclick = () => setView('ai');
@@ -3011,3 +3078,285 @@ window.toggleSidebar = (collapsed = null) => {
     // Forçar redimensionamento para alinhar componentes (ex: swiper)
     setTimeout(() => window.dispatchEvent(new Event('resize')), 300);
 };
+
+// ======================== LESSONS SYSTEM ========================
+
+window.openLessonModal = function (id = null) {
+    const lesson = id ? S.lessons.find(l => l.id === id) : null;
+    document.getElementById('lesson-id').value = id || '';
+    document.getElementById('lesson-title').value = lesson?.title || '';
+    document.getElementById('lesson-video-id').value = lesson?.videoId || '';
+    document.getElementById('lesson-thumb').value = lesson?.thumb || '';
+    document.getElementById('lesson-html').value = lesson?.html || '';
+    document.getElementById('lesson-modal-title').textContent = id ? 'Editar Conteúdo' : 'Novo Conteúdo';
+
+    openModal('modal-lesson');
+    trackAction('open_lesson_modal');
+};
+
+document.getElementById('lesson-form').onsubmit = async (e) => {
+    e.preventDefault();
+    const id = document.getElementById('lesson-id').value;
+    const data = {
+        title: document.getElementById('lesson-title').value,
+        videoId: document.getElementById('lesson-video-id').value,
+        thumb: document.getElementById('lesson-thumb').value,
+        html: document.getElementById('lesson-html').value,
+        updatedAt: new Date().toISOString()
+    };
+
+    if (!id) data.createdAt = new Date().toISOString();
+
+    showLoading('Salvando conteúdo...');
+    try {
+        const ref = id ? db.ref('lessons/' + id) : db.ref('lessons').push();
+        await ref.set(data);
+        closeModal('modal-lesson');
+        trackAction('save_lesson');
+    } catch (err) {
+        console.error(err);
+        alert('Erro ao salvar aula.');
+    }
+    hideLoading();
+};
+
+window.deleteLesson = async function (id, e) {
+    if (e) e.stopPropagation();
+    if (!confirm('Deseja realmente excluir esta aula?')) return;
+
+    showLoading('Excluindo...');
+    try {
+        await db.ref('lessons/' + id).remove();
+        trackAction('delete_lesson');
+    } catch (err) {
+        console.error(err);
+    }
+    hideLoading();
+};
+
+function renderLessonsView() {
+    const grid = document.getElementById('lessons-grid');
+    const empty = document.getElementById('lessons-empty');
+    if (!grid) return;
+
+    grid.innerHTML = '';
+    const isAdmin = firebase.auth().currentUser?.email === 'maispraticodesenvolvimento@gmail.com';
+
+    // Garante que o botão de adicionar só aparece para admin
+    const btnAdd = document.getElementById('btn-add-lesson');
+    if (btnAdd) {
+        if (isAdmin) btnAdd.classList.remove('hidden');
+        else btnAdd.classList.add('hidden');
+    }
+
+    if (S.lessons.length === 0) {
+        empty.classList.remove('hidden');
+        return;
+    }
+    empty.classList.add('hidden');
+
+    S.lessons.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).forEach(l => {
+        const card = document.createElement('div');
+        card.className = 'lesson-card';
+        card.style = `
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    `;
+
+        // Hover effect via JS since we are injecting style
+        card.onmouseover = () => {
+            card.style.transform = 'translateY(-8px)';
+            card.style.boxShadow = 'var(--shadow)';
+            card.style.borderColor = 'var(--primary-lt)';
+        };
+        card.onmouseout = () => {
+            card.style.transform = 'translateY(0)';
+            card.style.boxShadow = 'var(--shadow-sm)';
+            card.style.borderColor = 'var(--border)';
+        };
+
+        const thumb = l.thumb || `https://img.youtube.com/vi/${l.videoId}/mqdefault.jpg`;
+
+        card.innerHTML = `
+      <div style="width: 100%; aspect-ratio: 16/9; background: #eee; position: relative; overflow: hidden;">
+        <img src="${thumb}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='fundoinvisivel.png'">
+        <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0) 60%, rgba(0,0,0,0.4) 100%);"></div>
+        <div style="position: absolute; bottom: 12px; right: 12px; background: rgba(0,0,0,0.6); color: #fff; padding: 4px 8px; border-radius: 6px; font-size: 0.7rem; backdrop-filter: blur(4px);">
+          <span class="material-symbols-outlined" style="font-size: 14px; margin-right: 4px;">play_circle</span>
+          VÍDEO
+        </div>
+      </div>
+      <div style="padding: 16px; flex: 1; display: flex; flex-direction: column; gap: 8px;">
+        <h3 style="font-size: 1rem; color: var(--text); margin: 0; line-height: 1.4;">${l.title}</h3>
+        <div style="margin-top: auto; display: flex; align-items: center; justify-content: space-between;">
+           <span style="font-size: 0.75rem; color: var(--text3);">Cadastrado em ${new Date(l.createdAt).toLocaleDateString()}</span>
+           ${isAdmin ? `
+            <div style="display: flex; gap: 4px;">
+              <button class="btn btn-ghost btn-icon-sm" onclick="openLessonModal('${l.id}'); event.stopPropagation();">
+                <span class="material-symbols-outlined" style="font-size: 18px;">edit</span>
+              </button>
+              <button class="btn btn-ghost btn-icon-sm" onclick="deleteLesson('${l.id}', event)">
+                <span class="material-symbols-outlined" style="font-size: 18px; color: var(--danger);">delete</span>
+              </button>
+            </div>
+           ` : ''}
+        </div>
+      </div>
+    `;
+
+        card.onclick = () => openLessonDetail(l.id);
+        grid.appendChild(card);
+    });
+}
+
+window.openLessonDetail = function (id) {
+    const lesson = S.lessons.find(l => l.id === id);
+    if (!lesson) return;
+
+    document.getElementById('lesson-detail-title').textContent = lesson.title;
+
+    // Gera o iframe automaticamente a partir da URL salva
+    const url = lesson.html; // O campo html agora guarda apenas o link
+    const iframeHtml = `<iframe src="${url}" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>`;
+    
+    document.getElementById('lesson-detail-content').innerHTML = iframeHtml;
+    
+    setView('lesson-detail');
+    trackAction('view_lesson_detail');
+};
+
+// ======================== WEEKLY PLANNER ========================
+
+const DAY_LABELS = {
+    'seg': 'Segunda-feira',
+    'ter': 'Terça-feira',
+    'qua': 'Quarta-feira',
+    'qui': 'Quinta-feira',
+    'sex': 'Sexta-feira'
+};
+
+function renderWeeklyPlanner() {
+    const user = firebase.auth().currentUser;
+    const isAdmin = user && user.email === 'maispraticodesenvolvimento@gmail.com';
+    const grid = document.getElementById('weekly-schedule-grid');
+    if (!grid) return;
+
+    Object.keys(DAY_LABELS).forEach(key => {
+        const card = grid.querySelector(`[data-day="${key}"]`);
+        if (!card) return;
+
+        const content = S.weeklyPlanner[key];
+        const textEl = card.querySelector('.day-text');
+        const actionsEl = card.querySelector('.event-actions');
+
+        if (content) {
+            // Truncate to 50 chars for summary
+            const cleanText = content.replace(/<[^>]*>/g, ''); // Remove HTML for truncation check
+            if (cleanText.length > 50) {
+                textEl.innerHTML = cleanText.substring(0, 50) + '...';
+            } else {
+                textEl.innerHTML = content;
+            }
+        } else {
+            textEl.innerHTML = isAdmin ? 
+                '<span style="color:var(--primary); font-size:0.8rem; font-style:italic; opacity:0.7;">+ Clique para adicionar conteúdo</span>' : 
+                '<span style="color:var(--text3); font-size:0.8rem; font-style:italic; opacity:0.5;">Nenhum conteúdo definido</span>';
+        }
+
+        if (isAdmin) {
+            if (actionsEl) actionsEl.classList.remove('hidden');
+            card.style.cursor = 'pointer';
+            card.onclick = () => window.openWeeklyEditModal(key);
+        } else {
+            if (actionsEl) actionsEl.classList.add('hidden');
+            // Se tiver conteúdo, permitir que o aluno clique para ver o texto completo
+            if (content) {
+                card.style.cursor = 'pointer';
+                card.onclick = () => window.openWeeklyViewModal(key);
+            } else {
+                card.style.cursor = 'default';
+                card.onclick = null;
+            }
+        }
+    });
+}
+
+window.openWeeklyViewModal = function (key) {
+    const label = DAY_LABELS[key];
+    const content = S.weeklyPlanner[key] || 'Nenhum conteúdo definido';
+    
+    const dayEl = document.getElementById('weekly-view-day');
+    const contentEl = document.getElementById('weekly-view-content');
+    
+    if (dayEl) dayEl.textContent = label;
+    if (contentEl) contentEl.innerHTML = content;
+    
+    if (typeof openModal === 'function') {
+        openModal('modal-weekly-view');
+    } else {
+        document.getElementById('modal-weekly-view')?.classList.remove('hidden');
+    }
+};
+
+window.openWeeklyEditModal = function (key) {
+    console.log("[DEBUG] Abrindo modal para:", key);
+    const label = DAY_LABELS[key];
+    const keyEl = document.getElementById('edit-day-key');
+    const labelEl = document.getElementById('edit-day-label');
+    const textEl = document.getElementById('edit-day-text');
+    
+    if (keyEl) keyEl.value = key;
+    if (labelEl) labelEl.textContent = `Conteúdo para ${label}`;
+    if (textEl) textEl.value = S.weeklyPlanner[key] || '';
+    
+    if (typeof openModal === 'function') {
+        openModal('modal-weekly-edit');
+    } else {
+        document.getElementById('modal-weekly-edit')?.classList.remove('hidden');
+    }
+};
+
+window.openLessonModal = function (id = null) {
+    console.log("[DEBUG] Abrindo modal de aula, ID:", id);
+    const lesson = id ? S.lessons.find(l => l.id === id) : null;
+    document.getElementById('lesson-id').value = id || '';
+    document.getElementById('lesson-title').value = lesson?.title || '';
+    document.getElementById('lesson-video-id').value = lesson?.videoId || '';
+    document.getElementById('lesson-thumb').value = lesson?.thumb || '';
+    document.getElementById('lesson-html').value = lesson?.html || '';
+    document.getElementById('lesson-modal-title').textContent = id ? 'Editar Conteúdo' : 'Novo Conteúdo';
+
+    if (typeof openModal === 'function') {
+        openModal('modal-lesson');
+    } else {
+        document.getElementById('modal-lesson')?.classList.remove('hidden');
+    }
+    trackAction('open_lesson_modal');
+};
+
+document.getElementById('weekly-edit-form').onsubmit = async (e) => {
+    e.preventDefault();
+    const key = document.getElementById('edit-day-key').value;
+    const text = document.getElementById('edit-day-text').value;
+
+    showLoading('Salvando planejamento...');
+    try {
+        await db.ref('weekly_planner/' + key).set(text);
+        closeModal('modal-weekly-edit');
+        trackAction('save_weekly_planner');
+    } catch (err) {
+        console.error(err);
+        alert('Erro ao salvar planejamento.');
+    }
+    hideLoading();
+};
+
+
