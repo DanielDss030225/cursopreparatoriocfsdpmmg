@@ -24,7 +24,7 @@ const TRANSLATIONS = {
     login_email_placeholder: 'seu@email.com',
     login_confirm_label: 'Confirmar Senha',
     login_confirm_placeholder: 'Repita a senha',
-    login_no_account: 'Não tem uma conta? <span style="color: var(--primary);">Cadastre-se grátis.</span>',
+    login_no_account: 'Não tem uma conta? <span style="color: var(--primary);">Cadastre-se.</span>',
     login_have_account: 'Já tem uma conta? <span style="color: var(--primary);">Fazer login</span>',
     login_forgot: 'Esqueci minha senha',
     login_or: 'ou',

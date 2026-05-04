@@ -318,7 +318,7 @@ window.toggleAuthMode = function () {
 
         btnSubmit.classList.add('hidden');
         btnNext.classList.remove('hidden');
-        btnToggle.innerHTML = i18n.t('login_no_account') || 'Não tem uma conta? <span style="color: var(--primary);">Cadastre-se grátis.</span>';
+        btnToggle.innerHTML = i18n.t('login_no_account') || 'Não tem uma conta? <span style="color: var(--primary);">Cadastre-se.</span>';
         if (forgotBtn) forgotBtn.closest('#forgot-pass-wrap')?.classList.remove('hidden');
         $('login-form')?.classList.remove('register-mode');
     } else {
@@ -1465,7 +1465,7 @@ function setView(mode) {
         if (isAdmin) btnAdd.classList.remove('hidden');
         else btnAdd.classList.add('hidden');
     }
-    
+
     if (isAdmin) {
         document.querySelectorAll('.admin-only').forEach(el => el.classList.remove('hidden'));
     }
@@ -3226,9 +3226,9 @@ window.openLessonDetail = function (id) {
     // Gera o iframe automaticamente a partir da URL salva
     const url = lesson.html; // O campo html agora guarda apenas o link
     const iframeHtml = `<iframe src="${url}" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>`;
-    
+
     document.getElementById('lesson-detail-content').innerHTML = iframeHtml;
-    
+
     setView('lesson-detail');
     trackAction('view_lesson_detail');
 };
@@ -3266,8 +3266,8 @@ function renderWeeklyPlanner() {
                 textEl.innerHTML = content;
             }
         } else {
-            textEl.innerHTML = isAdmin ? 
-                '<span style="color:var(--primary); font-size:0.8rem; font-style:italic; opacity:0.7;">+ Clique para adicionar conteúdo</span>' : 
+            textEl.innerHTML = isAdmin ?
+                '<span style="color:var(--primary); font-size:0.8rem; font-style:italic; opacity:0.7;">+ Clique para adicionar conteúdo</span>' :
                 '<span style="color:var(--text3); font-size:0.8rem; font-style:italic; opacity:0.5;">Nenhum conteúdo definido</span>';
         }
 
@@ -3292,13 +3292,13 @@ function renderWeeklyPlanner() {
 window.openWeeklyViewModal = function (key) {
     const label = DAY_LABELS[key];
     const content = S.weeklyPlanner[key] || 'Nenhum conteúdo definido';
-    
+
     const dayEl = document.getElementById('weekly-view-day');
     const contentEl = document.getElementById('weekly-view-content');
-    
+
     if (dayEl) dayEl.textContent = label;
     if (contentEl) contentEl.innerHTML = content;
-    
+
     if (typeof openModal === 'function') {
         openModal('modal-weekly-view');
     } else {
@@ -3312,11 +3312,11 @@ window.openWeeklyEditModal = function (key) {
     const keyEl = document.getElementById('edit-day-key');
     const labelEl = document.getElementById('edit-day-label');
     const textEl = document.getElementById('edit-day-text');
-    
+
     if (keyEl) keyEl.value = key;
     if (labelEl) labelEl.textContent = `Conteúdo para ${label}`;
     if (textEl) textEl.value = S.weeklyPlanner[key] || '';
-    
+
     if (typeof openModal === 'function') {
         openModal('modal-weekly-edit');
     } else {
