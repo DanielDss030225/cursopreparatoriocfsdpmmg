@@ -1355,6 +1355,10 @@ select {
     justify-content: flex-start; /* Alinha ao topo com margem no desktop */
     padding: 40px 20px;
   }
+  /* Remove padding do overlay quando o modal for FULL */
+  .modal-overlay:has(.modal-sheet-full) {
+    padding: 0 !important;
+  }
 }
 
 .modal-overlay.hidden {
@@ -1383,8 +1387,12 @@ select {
   }
   
   .modal-sheet-full {
-    max-height: 98dvh;
-    border-radius: 20px 20px 0 0;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    border-radius: 0 !important;
+  }
+  .modal-sheet-full .modal-handle {
+    display: none !important;
   }
   
   .modal-sheet-auto {
@@ -1399,6 +1407,14 @@ select {
     border-radius: 24px;
     max-height: 80vh; /* Limite rigoroso para Desktop */
     margin: 0 auto;
+  }
+  
+  .modal-sheet-full {
+    max-width: 100% !important;
+    max-height: 100dvh !important;
+    height: 100dvh !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
   }
 }
 
@@ -3577,3 +3593,88 @@ span.flatpickr-weekday {
     font-size: 0.95rem;
   }
 }
+
+/* ===== LESSON CONTENT PREMIUM STYLING ===== */
+.html-content {
+    animation: fadeIn 0.5s ease-out;
+}
+
+.html-content h2 {
+    font-family: 'Inter', sans-serif !important;
+    letter-spacing: -0.02em;
+    position: relative;
+    padding-bottom: 12px !important;
+    margin-top: 32px !important;
+    margin-bottom: 16px !important;
+}
+
+.html-content h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 40px;
+    height: 4px;
+    background: var(--primary);
+    border-radius: 2px;
+}
+
+.html-content p {
+    color: var(--text2) !important;
+    font-size: 1.05rem !important;
+    line-height: 1.7 !important;
+    margin-bottom: 20px !important;
+}
+
+.html-content ul {
+    list-style-type: none !important;
+    padding: 0 !important;
+    margin-bottom: 24px !important;
+}
+
+.html-content li {
+    position: relative;
+    padding-left: 32px !important;
+    margin-bottom: 14px !important;
+    font-size: 1rem !important;
+    color: var(--text2) !important;
+}
+
+.html-content li::before {
+    content: 'check_circle';
+    font-family: 'Material Symbols Outlined';
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-size: 20px;
+    color: var(--primary);
+}
+
+.html-content img {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: block;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+.html-content img:hover {
+    transform: scale(1.02);
+}
+
+.lesson-alert {
+    background: var(--primary-lt);
+    border-left: 4px solid var(--primary);
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 28px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.1);
+    transition: all 0.2s ease;
+}
+
+.lesson-alert:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(124, 58, 237, 0.15);
+}

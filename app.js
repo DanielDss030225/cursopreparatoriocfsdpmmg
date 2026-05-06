@@ -20,6 +20,7 @@ if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
 }
 const db = firebase.database();
+const storage = firebase.storage();
 
 // ======================== STATE ========================
 const S = {
@@ -3020,39 +3021,21 @@ function showPromotionalToasts() {
 
     const t = (k) => typeof i18n !== 'undefined' ? i18n.t(k) : k;
 
-    // 1. Toast da IA
-    if (!localStorage.getItem('agbizu_dismiss_toast_ia')) {
+    // 1. Toast do Cronograma
+    if (!localStorage.getItem('agbizu_dismiss_toast_scale')) {
         createToast({
-            id: 'ia',
-            type: 'ia',
-            icon: 'smart_toy',
-            title: t('toast_ia_title'),
-            message: t('toast_ia_desc'),
-            primaryBtn: t('toast_btn_open'),
-            secondaryBtn: t('btn_cancel'),
+            id: 'scale',
+            type: 'tutorial',
+            icon: 'assignment',
+            title: t('toast_scale_title'),
+            message: t('toast_scale_desc'),
+            primaryBtn: t('toast_btn_scale'),
+            secondaryBtn: t('toast_btn_ok'),
             onPrimary: () => {
-                setView('ai');
+                setView('month');
             }
         });
     }
-
-    // 2. Toast da Escala (após um pequeno delay se o da IA estiver visível)
-    setTimeout(() => {
-        if (!localStorage.getItem('agbizu_dismiss_toast_scale')) {
-            createToast({
-                id: 'scale',
-                type: 'tutorial',
-                icon: 'calendar_month',
-                title: t('toast_scale_title'),
-                message: t('toast_scale_desc'),
-                primaryBtn: t('toast_btn_scale'),
-                secondaryBtn: t('toast_btn_ok'),
-                onPrimary: () => {
-                    openScaleModal();
-                }
-            });
-        }
-    }, 1000);
 }
 
 // ======================== SIDEBAR COLLAPSE ========================
@@ -3081,13 +3064,189 @@ window.toggleSidebar = (collapsed = null) => {
 
 // ======================== LESSONS SYSTEM ========================
 
+window.addLessonSection = function (data = null) {
+    const container = document.getElementById('lesson-sections-container');
+    const sectionIndex = container.children.length;
+    const randomId = 'sec-media-' + Math.random().toString(36).substring(2, 9);
+
+    const sectionDiv = document.createElement('div');
+    sectionDiv.className = 'lesson-section-row';
+    sectionDiv.style = `
+        padding: 16px;
+        background: #f8fafc;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        position: relative;
+    `;
+
+    sectionDiv.innerHTML = `
+        <button type="button" class="btn btn-ghost btn-icon-sm" onclick="this.parentElement.remove()" style="position: absolute; top: 8px; right: 8px; color: var(--danger);">
+            <span class="material-symbols-outlined" style="font-size: 18px;">delete</span>
+        </button>
+        
+        <div class="field-group" style="margin-bottom: 0;">
+            <label class="field-label" style="font-size: 0.75rem;">Título da Seção</label>
+            <input type="text" class="field-input sec-title" placeholder="Ex: Introdução" value="${data?.title || ''}" />
+        </div>
+        
+        <div class="field-group" style="margin-bottom: 0;">
+            <label class="field-label" style="font-size: 0.75rem;">Subtítulo</label>
+            <input type="text" class="field-input sec-subtitle" placeholder="Opcional" value="${data?.subtitle || ''}" />
+        </div>
+
+        <div class="field-group" style="margin-bottom: 0;">
+            <label class="field-label" style="font-size: 0.75rem;">Link / ID / Upload de Mídia</label>
+            <div style="display: flex; gap: 8px;">
+                <input type="text" id="${randomId}" class="field-input flex-1 sec-media" placeholder="Link, ID YouTube ou faça upload" value="${data?.mediaUrl || ''}" />
+                <button type="button" class="btn btn-outline" onclick="document.getElementById('${randomId}-file').click()" style="padding: 0 10px; border-radius: 10px;">
+                    <span class="material-symbols-outlined" style="font-size: 18px;">upload_file</span>
+                </button>
+                <input type="file" id="${randomId}-file" accept="image/*,video/*" style="display: none;" onchange="window.handleGeneralUpload(this, '${randomId}')" />
+            </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div class="field-group" style="margin-bottom: 0;">
+                <label class="field-label" style="font-size: 0.75rem;">Link Externo (URL)</label>
+                <input type="text" class="field-input sec-link-url" placeholder="https://..." value="${data?.linkUrl || ''}" />
+            </div>
+            <div class="field-group" style="margin-bottom: 0;">
+                <label class="field-label" style="font-size: 0.75rem;">Texto do Link</label>
+                <input type="text" class="field-input sec-link-label" placeholder="Ex: Baixar PDF" value="${data?.linkLabel || ''}" />
+            </div>
+        </div>
+
+      
+
+        <div class="field-group" style="margin-bottom: 0;">
+            <label class="field-label" style="font-size: 0.75rem;">Conteúdo (Ex: <b>Negrito</b>, <i>Itálico</i>, <br> Pular Linha)</label>
+            <textarea class="field-input sec-content" rows="4" placeholder="Escreva o conteúdo aqui...">${data?.content || ''}</textarea>
+        </div>
+          <div class="field-group" style="margin-bottom: 0;">
+            <label class="field-label" style="font-size: 0.75rem;">Gabarito / Resposta (Fica oculto até o clique)</label>
+            <textarea class="field-input sec-answer" rows="2" placeholder="Digite a resposta ou explicação aqui...">${data?.answer || ''}</textarea>
+        </div>
+    `;
+
+    // Adicionar listener de paste para capturar formatação
+    const textarea = sectionDiv.querySelector('.sec-content');
+    textarea.addEventListener('paste', function (e) {
+        const html = e.clipboardData.getData('text/html');
+        if (html) {
+            e.preventDefault();
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = html;
+
+            // Função recursiva simples para converter tags básicas
+            function clean(node) {
+                let text = "";
+                node.childNodes.forEach(child => {
+                    if (child.nodeType === 3) { // Text node
+                        text += child.textContent;
+                    } else if (child.nodeType === 1) { // Element node
+                        let content = clean(child);
+                        let tag = child.tagName;
+
+                        let wrapBold = (tag === 'B' || tag === 'STRONG' || child.style.fontWeight === 'bold' || parseInt(child.style.fontWeight) >= 600);
+                        let wrapItalic = (tag === 'I' || tag === 'EM' || child.style.fontStyle === 'italic');
+
+                        let prefix = "";
+                        let suffix = "";
+
+                        if (tag === 'P') suffix = "\n\n";
+                        else if (tag === 'DIV' || tag === 'BR' || tag === 'H1' || tag === 'H2' || tag === 'H3') suffix = "\n";
+                        else if (tag === 'LI') {
+                            prefix = "• ";
+                            suffix = "\n";
+                        }
+
+                        let inner = content;
+                        if (wrapBold) inner = `<b>${inner}</b>`;
+                        if (wrapItalic) inner = `<i>${inner}</i>`;
+
+                        text += prefix + inner + suffix;
+                    }
+                });
+                return text;
+            }
+
+            let cleanedText = clean(tempDiv);
+            // Remover excessos de quebras triplas ou leading/trailing
+            cleanedText = cleanedText.replace(/\n{3,}/g, '\n\n').trim();
+
+            // Inserir no cursor
+            const start = this.selectionStart;
+            const end = this.selectionEnd;
+            const val = this.value;
+            this.value = val.substring(0, start) + cleanedText + val.substring(end);
+            this.selectionStart = this.selectionEnd = start + cleanedText.length;
+        }
+    });
+
+    container.appendChild(sectionDiv);
+};
+
+window.handleGeneralUpload = async function (input, targetId) {
+    const file = input.files[0];
+    if (!file) return;
+
+    const isVideo = file.type.startsWith('video/');
+    const isImage = file.type.startsWith('image/');
+
+    if (!isVideo && !isImage) {
+        alert('Por favor, selecione uma imagem ou um vídeo.');
+        return;
+    }
+
+    const folder = isVideo ? 'lesson_videos' : 'lesson_images';
+    showLoading(`Fazendo upload do ${isVideo ? 'vídeo' : 'arquivo'}...`);
+
+    try {
+        const fileName = `${Date.now()}_${file.name}`;
+        const storageRef = storage.ref(`${folder}/${fileName}`);
+        const snapshot = await storageRef.put(file);
+        const url = await snapshot.ref.getDownloadURL();
+
+        const target = document.getElementById(targetId);
+        if (target) {
+            target.value = url;
+            play('click');
+        }
+    } catch (e) {
+        console.error("Upload error:", e);
+        alert('Erro ao fazer upload. Verifique as permissões de storage.');
+    }
+    hideLoading();
+};
+
 window.openLessonModal = function (id = null) {
     const lesson = id ? S.lessons.find(l => l.id === id) : null;
     document.getElementById('lesson-id').value = id || '';
     document.getElementById('lesson-title').value = lesson?.title || '';
     document.getElementById('lesson-video-id').value = lesson?.videoId || '';
     document.getElementById('lesson-thumb').value = lesson?.thumb || '';
-    document.getElementById('lesson-html').value = lesson?.html || '';
+
+    // Limpar e reconstruir seções
+    const container = document.getElementById('lesson-sections-container');
+    container.innerHTML = '';
+
+    if (lesson?.json) {
+        try {
+            const sections = JSON.parse(lesson.json);
+            if (Array.isArray(sections)) {
+                sections.forEach(s => window.addLessonSection(s));
+            }
+        } catch (e) {
+            console.error("Erro ao ler JSON de seções:", e);
+        }
+    } else {
+        // Adicionar uma seção vazia por padrão se for novo
+        if (!id) window.addLessonSection();
+    }
+
     document.getElementById('lesson-modal-title').textContent = id ? 'Editar Conteúdo' : 'Novo Conteúdo';
 
     openModal('modal-lesson');
@@ -3097,11 +3256,24 @@ window.openLessonModal = function (id = null) {
 document.getElementById('lesson-form').onsubmit = async (e) => {
     e.preventDefault();
     const id = document.getElementById('lesson-id').value;
+
+    // Coletar seções
+    const sectionElements = document.querySelectorAll('.lesson-section-row');
+    const sections = Array.from(sectionElements).map(row => ({
+        title: row.querySelector('.sec-title').value,
+        subtitle: row.querySelector('.sec-subtitle').value,
+        mediaUrl: row.querySelector('.sec-media').value,
+        linkUrl: row.querySelector('.sec-link-url').value,
+        linkLabel: row.querySelector('.sec-link-label').value,
+        answer: row.querySelector('.sec-answer').value,
+        content: row.querySelector('.sec-content').value
+    }));
+
     const data = {
         title: document.getElementById('lesson-title').value,
         videoId: document.getElementById('lesson-video-id').value,
         thumb: document.getElementById('lesson-thumb').value,
-        html: document.getElementById('lesson-html').value,
+        json: JSON.stringify(sections),
         updatedAt: new Date().toISOString()
     };
 
@@ -3223,14 +3395,130 @@ window.openLessonDetail = function (id) {
 
     document.getElementById('lesson-detail-title').textContent = lesson.title;
 
-    // Gera o iframe automaticamente a partir da URL salva
-    const url = lesson.html; // O campo html agora guarda apenas o link
-    const iframeHtml = `<iframe src="${url}" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>`;
+    let contentHtml = '';
 
-    document.getElementById('lesson-detail-content').innerHTML = iframeHtml;
+    // 1. Vídeo no Topo (se houver)
+    if (lesson.videoId) {
+        let videoHtml = '';
+        const v = lesson.videoId;
+        if (v.length === 11) { // YouTube ID
+            videoHtml = `<iframe src="https://www.youtube.com/embed/${v}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen style="width:100%; aspect-ratio:16/9; border-radius:12px; margin-bottom:24px; box-shadow: var(--shadow);"></iframe>`;
+        } else if (v.includes('firebasestorage') || v.includes('.mp4')) {
+            videoHtml = `<video src="${v}" controls style="width:100%; aspect-ratio:16/9; border-radius:12px; margin-bottom:24px; box-shadow: var(--shadow); background: #000;"></video>`;
+        } else if (v.match(/^\d+$/)) { // Vimeo
+            videoHtml = `<iframe src="https://player.vimeo.com/video/${v}" frameborder="0" allowfullscreen style="width:100%; aspect-ratio:16/9; border-radius:12px; margin-bottom:24px; box-shadow: var(--shadow);"></iframe>`;
+        } else {
+            videoHtml = `<iframe src="${v}" frameborder="0" allowfullscreen style="width:100%; aspect-ratio:16/9; border-radius:12px; margin-bottom:24px; box-shadow: var(--shadow);"></iframe>`;
+        }
+        contentHtml += videoHtml;
+    }
+
+    // 2. Renderizar Seções
+    if (lesson.json) {
+        try {
+            const sections = JSON.parse(lesson.json);
+            sections.forEach(sec => {
+                let mediaHtml = '';
+                if (sec.mediaUrl) {
+                    const m = sec.mediaUrl;
+                    if (m.length === 11) {
+                        mediaHtml = `<iframe src="https://www.youtube.com/embed/${m}" frameborder="0" allowfullscreen style="width:100%; aspect-ratio:16/9;"></iframe>`;
+                    } else if (m.includes('firebasestorage') || m.includes('.mp4')) {
+                        // Detectar se é vídeo pelo link do Firebase Storage ou extensão
+                        if (m.includes('/lesson_videos%2F') || m.includes('.mp4')) {
+                            mediaHtml = `<video src="${m}" controls style="width:100%; aspect-ratio:16/9; background: #000;"></video>`;
+                        } else {
+                            mediaHtml = `<img src="${m}" style="width:100%; display: block;" onerror="this.style.display='none'">`;
+                        }
+                    } else {
+                        mediaHtml = `<img src="${m}" style="width:100%; display: block;" onerror="this.style.display='none'">`;
+                    }
+                }
+
+                contentHtml += `
+                    <div class="lesson-detail-section" style="margin-bottom: 40px;">
+                        ${sec.title ? `<h2 style="font-size: 1.6rem; color: var(--primary); margin-bottom: 8px; font-weight: 700;">${sec.title}</h2>` : ''}
+                        ${sec.subtitle ? `<h4 style="font-size: 1.1rem; color: var(--text3); margin-bottom: 20px; font-weight: 500;">${sec.subtitle}</h4>` : ''}
+                        
+                        ${mediaHtml ? `
+                            <div style="margin: 24px 0; border-radius: 16px; overflow: hidden; box-shadow: var(--shadow-sm);">
+                                ${mediaHtml}
+                            </div>
+                        ` : ''}
+
+                        ${sec.content ? `
+                            <div style="font-size: 1.05rem; color: var(--text2); line-height: 1.7; white-space: pre-line;">${sec.content}</div>
+                        ` : ''}
+
+                        ${sec.linkUrl ? `
+                            <div style="margin-top: 20px;">
+                                <a href="${sec.linkUrl}" target="_blank" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px; text-decoration: none; padding: 12px 24px; color: #fff;">
+                                    <span class="material-symbols-outlined">link</span>
+                                    ${sec.linkLabel || 'Abrir Link'}
+                                </a>
+                            </div>
+                        ` : ''}
+
+                        ${sec.answer ? `
+                            <div style="margin-top: 24px;">
+                                <button class="btn btn-outline" onclick="this.nextElementSibling.classList.toggle('hidden'); this.textContent = this.nextElementSibling.classList.contains('hidden') ? 'Ver Resposta' : 'Ocultar Resposta';" style="font-size: 0.85rem; padding: 8px 16px;">
+                                    Ver Resposta
+                                </button>
+                                <div class="hidden" style="margin-top: 12px; padding: 16px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; color: #166534; font-size: 0.95rem; line-height: 1.6; white-space: pre-line;">
+                                    <div style="font-weight: 700; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+                                        <span class="material-symbols-outlined" style="font-size: 18px;">check_circle</span>
+                                        Gabarito:
+                                    </div>
+                                    ${sec.answer}
+                                </div>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            });
+        } catch (e) {
+            console.error("Erro ao processar JSON da aula:", e);
+            contentHtml += `<p style="color: var(--danger);">Erro ao carregar conteúdo estruturado.</p>`;
+        }
+    } else if (lesson.html) {
+        // Legado: Iframe simples
+        contentHtml += `<iframe src="${lesson.html}" width="100%" height="800px" frameborder="0" allowfullscreen style="border-radius:12px; box-shadow: var(--shadow);"></iframe>`;
+    }
+
+    document.getElementById('lesson-detail-content').innerHTML = `
+        <div style="max-width: 800px; margin: 0 auto; padding: 24px;">
+            ${contentHtml}
+        </div>
+    `;
 
     setView('lesson-detail');
     trackAction('view_lesson_detail');
+};
+
+// --- Upload Handler ---
+window.handleLessonThumbUpload = async function (input) {
+    const file = input.files[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+        alert('Por favor, selecione uma imagem.');
+        return;
+    }
+
+    showLoading('Fazendo upload da imagem...');
+    try {
+        const fileName = `${Date.now()}_${file.name}`;
+        const storageRef = storage.ref(`lesson_thumbs/${fileName}`);
+        const snapshot = await storageRef.put(file);
+        const url = await snapshot.ref.getDownloadURL();
+
+        document.getElementById('lesson-thumb').value = url;
+        play('click');
+    } catch (e) {
+        console.error("Upload error:", e);
+        alert('Erro ao fazer upload da imagem. Verifique as permissões de storage.');
+    }
+    hideLoading();
 };
 
 // ======================== WEEKLY PLANNER ========================
@@ -3324,23 +3612,6 @@ window.openWeeklyEditModal = function (key) {
     }
 };
 
-window.openLessonModal = function (id = null) {
-    console.log("[DEBUG] Abrindo modal de aula, ID:", id);
-    const lesson = id ? S.lessons.find(l => l.id === id) : null;
-    document.getElementById('lesson-id').value = id || '';
-    document.getElementById('lesson-title').value = lesson?.title || '';
-    document.getElementById('lesson-video-id').value = lesson?.videoId || '';
-    document.getElementById('lesson-thumb').value = lesson?.thumb || '';
-    document.getElementById('lesson-html').value = lesson?.html || '';
-    document.getElementById('lesson-modal-title').textContent = id ? 'Editar Conteúdo' : 'Novo Conteúdo';
-
-    if (typeof openModal === 'function') {
-        openModal('modal-lesson');
-    } else {
-        document.getElementById('modal-lesson')?.classList.remove('hidden');
-    }
-    trackAction('open_lesson_modal');
-};
 
 document.getElementById('weekly-edit-form').onsubmit = async (e) => {
     e.preventDefault();

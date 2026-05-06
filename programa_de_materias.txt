@@ -1,0 +1,73 @@
+# PROGRAMA DE MATÉRIAS - EDITAL DRH/CRS Nº 10/2024 (CFSD)
+
+1. LÍNGUA PORTUGUESA E INTERPRETAÇÃO DE TEXTOS
+   1.1 Adequação conceitual.
+   1.2 Pertinência, relevância e articulação dos argumentos.
+   1.3 Seleção vocabular.
+   1.4 Estudo de texto.
+   1.5 Tipologia textual e Gêneros textuais.
+   1.6 Ortografia oficial.
+   1.7 Acentuação gráfica.
+   1.8 Emprego dos sinais de pontuação.
+   1.9 Estrutura e formação de palavras.
+   1.10 Classes de palavras.
+   1.11 Frase, oração e período.
+   1.12 Termos da oração.
+   1.13 Período composto por coordenação e subordinação.
+   1.14 Funções sintáticas dos pronomes relativos.
+   1.15 Emprego de nomes e pronomes.
+   1.16 Emprego de tempos e modos verbais.
+   1.17 Regência verbal e nominal.
+   1.18 Concordância verbal e nominal.
+   1.19 Orações reduzidas.
+   1.20 Colocação pronominal.
+   1.21 Estilística.
+   1.22 Figuras de linguagem.
+   1.23 Vícios de linguagem e qualidade da boa linguagem.
+   1.24 Fonemas.
+   1.25 Semântica.
+   1.26 Emprego da crase.
+   1.27 Sintaxe (regência, concordância e colocação).
+   1.28 Coesão e coerência textuais.
+
+2. LITERATURA
+   2.1 Livro “Campo Geral” (Autor João Guimarães Rosa).
+   2.2 Livro “Vidas Secas” (Autor Graciliano Ramos).
+
+3. NOÇÕES DE LÍNGUA INGLESA
+   3.1 Compreensão e interpretação de texto escrito em língua inglesa.
+   3.2 Itens gramaticais relevantes para a compreensão dos conteúdos semânticos.
+
+4. NOÇÕES DE DIREITO
+   4.1 Constituição da República Federativa do Brasil:
+       a) Título I: Dos Princípios Fundamentais;
+       b) Título II: Dos Direitos e Garantias Fundamentais:
+          - Capítulo I: Dos Direitos e Deveres Individuais e Coletivos;
+          - Capítulo III: Da Nacionalidade;
+          - Capítulo IV: Dos Direitos Políticos;
+       c) Título III: Da Organização do Estado:
+          - Capítulo VII: Da Administração Pública:
+            - Seção I: Disposições Gerais;
+            - Seção III: Dos Militares dos Estados, Do Distrito Federal e dos Territórios;
+       d) Título IV: Da Organização dos Poderes:
+          - Capítulo III: Do Poder Judiciário:
+            - Seção VII: Dos Tribunais e Juízes Militares;
+            - Seção VIII: Dos Tribunais e Juízes dos Estados;
+       e) Título V: Da Defesa do Estado e Das Instituições Democráticas:
+          - Capítulo II: Das Forças Armadas;
+          - Capítulo III: Da Segurança Pública.
+   4.2 Lei n. 4657, de 04 de setembro de 1942 – Lei de Introdução às Normas do Direito Brasileiro.
+   4.3 Declaração Universal dos Direitos Humanos – adotada pela Assembleia Geral das Nações Unidas em 10 de dezembro de 1948.
+   4.4 Convenção Americana sobre Direitos Humanos – assinada na Conferência Especializada Interamericana sobre Direitos Humanos (San Jose da Costa Rica), em 22 de novembro de 1969.
+
+5. RACIOCÍNIO LÓGICO-MATEMÁTICO
+   5.1 Análise e interpretação de representações de figuras planas, desenhos, mapas, gráficos, tabelas, séries estatísticas, séries temporais e plantas; utilização de escalas.
+   5.2 Conceitos e aplicações básicas de estatística: população, universo, amostra, amostragem e variáveis; medidas de tendência central e medidas de dispersão; porcentagem.
+   5.3 Estruturas e diagramas lógicos; lógica de primeira ordem; lógica de argumentação: analogias, inferências, deduções e conclusões; lógica sentencial (ou proposicional): tautologias, contradições e contingências; proposições simples e compostas; tabelas-verdade; equivalências e implicações lógicas; leis de Morgan; silogismos.
+   5.4 Métrica: áreas e volumes; estimativas; aplicações.
+   5.5 Modelagem de situações-problema por meio de equações do 1º e 2º graus e sistemas lineares.
+   5.6 Noções básicas de contagem, probabilidade e estatística.
+   5.7 Noções de função: análise gráfica; funções afim, quadrática, exponencial e logarítmica; aplicações.
+   5.8 Operações com conjuntos.
+   5.9 Sequências numéricas, progressão aritmética e progressão geométrica.
+   5.10 Variação de grandezas: razão e proporção com aplicações; regra de três simples e composta.

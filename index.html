@@ -649,7 +649,7 @@
             </div>
           </div>
 
-          <div style="width: 100%; height: calc(100vh - 54px); background: var(--surface); overflow: hidden;">
+          <div style="width: 100%; height: calc(100vh - 54px); background: var(--surface); overflow: auto;">
             <div id="lesson-detail-content" class="html-content" style="width: 100%; height: 100%;">
               <!-- O iframe injetado ocupará 100% deste espaço -->
             </div>
@@ -1028,7 +1028,7 @@
 
   <!-- LESSON FORM MODAL -->
   <div id="modal-lesson" class="modal-overlay hidden" style="z-index: 11000;">
-    <div class="modal-sheet modal-sheet-tall">
+    <div class="modal-sheet modal-sheet-full">
       <div class="modal-handle"></div>
       <div class="modal-header">
         <div id="lesson-modal-title" class="modal-title">Novo Conteúdo</div>
@@ -1047,20 +1047,56 @@
           </div>
 
           <div class="field-group">
-            <label class="field-label">Thumbnail (URL da Imagem)</label>
-            <input id="lesson-thumb" class="field-input" type="text" placeholder="https://exemplo.com/imagem.jpg" />
+            <label class="field-label">Thumbnail (Imagem de Capa)</label>
+            <div style="display: flex; gap: 10px;">
+              <input id="lesson-thumb" class="field-input flex-1" type="text"
+                placeholder="https://exemplo.com/imagem.jpg" />
+              <button type="button" class="btn btn-outline"
+                onclick="document.getElementById('lesson-thumb-file').click()"
+                style="padding: 0 12px; border-radius: 12px;">
+                <span class="material-symbols-outlined">upload_file</span>
+              </button>
+              <input type="file" id="lesson-thumb-file" accept="image/*" style="display: none;"
+                onchange="window.handleLessonThumbUpload(this)" />
+            </div>
+            <p style="font-size: 0.7rem; color: var(--text3); margin-top: 4px;">URL da imagem ou faça upload de um
+              arquivo.</p>
           </div>
 
           <div class="field-group">
-            <label class="field-label">Link do Conteúdo (URL) *</label>
-            <input id="lesson-html" class="field-input" type="text" placeholder="https://exemplo.com/seu-pdf-ou-site"
-              required />
-            <p style="font-size: 0.7rem; color: var(--text3); margin-top: 4px;">Cole apenas o link. O sistema criará o
-              Iframe automaticamente.</p>
+            <label class="field-label">Vídeo Principal (YouTube ID ou Upload)</label>
+            <div style="display: flex; gap: 10px;">
+              <input id="lesson-video-id" class="field-input flex-1" type="text" placeholder="Ex: dQw4w9WgXcQ" />
+              <button type="button" class="btn btn-outline"
+                onclick="document.getElementById('lesson-video-file').click()"
+                style="padding: 0 12px; border-radius: 12px;">
+                <span class="material-symbols-outlined">upload_file</span>
+              </button>
+              <input type="file" id="lesson-video-file" accept="video/*" style="display: none;"
+                onchange="window.handleGeneralUpload(this, 'lesson-video-id')" />
+            </div>
+            <p style="font-size: 0.7rem; color: var(--text3); margin-top: 4px;">ID do YouTube ou faça upload de um
+              arquivo de vídeo.</p>
           </div>
 
-          <!-- Removido o campo de vídeo separado para simplificar conforme solicitado -->
-          <input id="lesson-video-id" type="hidden" value="iframe_mode" />
+          <div class="field-group">
+            <div id="lesson-sections-container" style="display: flex; flex-direction: column; gap: 12px;">
+              <!-- Seções dinâmicas aqui -->
+            </div>
+
+            <div
+              style="display: flex; align-items: center; justify-content: space-between; margin-top: 16px; margin-bottom: 8px;">
+              <label class="field-label" style="margin-bottom: 0;">Seções de Conteúdo</label>
+              <button type="button" class="btn btn-ghost" onclick="window.addLessonSection()"
+                style="font-size: 0.8rem; color: var(--primary);">
+                <span class="material-symbols-outlined" style="font-size: 18px; margin-right: 4px;">add_circle</span>
+                Adicionar Seção
+              </button>
+            </div>
+
+            <p style="font-size: 0.7rem; color: var(--text3); margin-top: 8px;">Adicione seções com títulos, textos e
+              mídias.</p>
+          </div>
 
           <p id="lesson-error" class="form-error hidden"></p>
 
@@ -1077,6 +1113,7 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
 
   <!-- i18n module (must load before app.js) -->
   <script src="i18n.js"></script>
