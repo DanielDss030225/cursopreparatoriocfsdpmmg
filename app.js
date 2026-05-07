@@ -2029,38 +2029,20 @@ function renderSearch(query) {
         countEl.style.gap = "5px";
     }
 
-    const filtered = S.events.filter(ev => {
-        const d = new Date(ev.date + 'T12:00:00');
-        return (
-            ev.title.toLowerCase().includes(q) ||
-            (ev.description || '').toLowerCase().includes(q) ||
-            (ev.category || '').toLowerCase().includes(q) ||
-            d.toLocaleDateString(locale).includes(q)
-        );
-    }).sort((a, b) => a.date.localeCompare(b.date));
+    // 1. Filtrar Aulas (Conteúdos)
+    const filteredLessons = S.lessons.filter(l => 
+        l.title.toLowerCase().includes(q) ||
+        (l.json || '').toLowerCase().includes(q)
+    ).map(l => ({ ...l, searchType: 'lesson' }));
 
-    if (!filtered.length) {
-        if (countEl) countEl.innerHTML = `0 <span data-i18n="events_count_zero">${t('events_count_zero')}</span>`;
-        resultsEl.innerHTML = `<div class="no-events">${t('search_no_results')}</div>`;
-        return;
-    }
+    // 2. Definir Resultados
+    const finalResults = filteredLessons;
 
-    // Deduplicar mantendo ordem original
-    const dedupedFull = [];
-    const seen = new Set();
-    filtered.forEach(ev => {
-        const rootId = ev.parentEventId || ev.id;
-        if (!seen.has(rootId)) {
-            seen.add(rootId);
-            dedupedFull.push(ev);
-        }
-    });
-
-    S.searchState.results = dedupedFull;
+    S.searchState.results = finalResults;
     S.searchState.page = 0;
 
     if (countEl) {
-        countEl.innerHTML = `${dedupedFull.length} <span data-i18n="events_count_zero">${t('events_count_zero')}</span>`;
+        countEl.innerHTML = `${finalResults.length} <span data-i18n="events_count_zero">${t('events_count_zero')}</span>`;
         if (typeof i18n !== 'undefined') i18n.applyToDOM();
     }
 
@@ -2076,8 +2058,12 @@ function renderSearchPage() {
     const end = start + S.searchState.pageSize;
     const items = S.searchState.results.slice(start, end);
 
-    items.forEach(ev => {
-        resultsEl.appendChild(buildEventItem(ev, false, true));
+    items.forEach(item => {
+        if (item.searchType === 'lesson') {
+            resultsEl.appendChild(buildLessonSearchItem(item));
+        } else {
+            resultsEl.appendChild(buildEventItem(item, false, true));
+        }
     });
 
     if (end < S.searchState.results.length) {
@@ -2096,6 +2082,36 @@ function renderSearchPage() {
         };
         resultsEl.appendChild(loadMoreBtn);
     }
+}
+
+function buildLessonSearchItem(lesson) {
+    const wrap = document.createElement('div');
+    wrap.className = 'event-item';
+    wrap.style.cursor = 'pointer';
+
+    wrap.innerHTML = `
+        <div class="event-stripe" style="background: var(--primary);"></div>
+        <div class="event-body">
+            <div style="display:flex; align-items:center; justify-content: space-between; gap: 8px;">
+                <div class="event-title">${lesson.title}</div>
+                <div style="display:flex; align-items:center; gap:4px; font-size:0.75rem; color:var(--primary); background: var(--primary-lt); padding: 2px 8px; border-radius: 12px; flex-shrink: 0;">
+                    <span class="material-symbols-outlined" style="font-size:14px;">school</span>
+                    Aula
+                </div>
+            </div>
+            <div class="event-meta">
+                <span class="material-symbols-outlined" style="font-size:16px;">play_circle</span>
+                <span style="opacity:0.8;">Conteúdo Educativo</span>
+            </div>
+        </div>
+    `;
+
+    wrap.onclick = () => {
+        closeModal('modal-search');
+        window.openLessonDetail(lesson.id);
+    };
+
+    return wrap;
 }
 
 // Mensagem Diária e Onboarding Sequencial
@@ -3528,7 +3544,9 @@ const DAY_LABELS = {
     'ter': 'Terça-feira',
     'qua': 'Quarta-feira',
     'qui': 'Quinta-feira',
-    'sex': 'Sexta-feira'
+    'sex': 'Sexta-feira',
+    'sab': 'Sábado',
+    'dom': 'Domingo'
 };
 
 function renderWeeklyPlanner() {

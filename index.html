@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="theme-color" content="#ffffff" />
-  <title>CFSD PMMG - Aulas</title>
+  <title>Preparatório CFSd PMMG - Aulas</title>
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -38,7 +38,7 @@
       </div>
 
       <img src="fundoinvisivel.png" alt="ViewGo" class="lp-logo">
-      <div class="lp-title">CFSD PMMG</div>
+      <div class="lp-title">Preparatório CFSd PMMG</div>
       <p class="lp-subtitle">Prepare-se para o sucesso!</p>
 
       <div class="lp-flags">
@@ -75,7 +75,7 @@
         <div class="login-logo">
           <img src="fundoinvisivel.png" class="loginImg" alt="Logo">
         </div>
-        <div class="login-title">CFSD PMMG</div>
+        <div class="login-title">Preparatório CFSd PMMG</div>
         <p class="login-sub" id="login-description" data-i18n="login_title">Seu futuro começa aqui</p>
       </div>
 
@@ -312,7 +312,7 @@
         <div class="logo-area" style="display: flex; align-items: center; overflow: hidden; cursor: pointer;"
           onclick="window.toggleSidebar()">
           <img id="logoMarca" src="fundoinvisivel.png" alt="Logo">
-          <div class="menu-brand-name" style="margin-left: 15px; white-space: nowrap;">CFSD PMMG</div>
+          <div class="menu-brand-name" style="margin-left: 15px; white-space: nowrap;">CFSd PMMG</div>
         </div>
         <button id="btn-close-menu" class="btn btn-ghost btn-icon mobile-only">
           <span class="material-symbols-outlined">close</span>
@@ -413,7 +413,7 @@
 
           <p
             style="text-align: center; font-size: 0.7rem; color: var(--text3); margin-top: 20px; margin-bottom: 100px;">
-            CFSD PMMG v1.0
+            Preparatório CFSd PMMG v1.0
           </p>
         </div>
       </div>
@@ -468,17 +468,15 @@
       <!-- MAIN CALENDAR -->
       <main id="main-content" class="main-content">
 
-        <!-- CRONOGRAMA VIEW -->
         <div id="view-month" class="cal-view active" style="padding: 24px; overflow-y: auto;">
-          <div style="max-width: 900px; margin: 0 auto;">
+          <div style="max-width: 1100px; margin: 0 auto;">
 
             <section style="margin-bottom: 40px;">
               <h2 style="font-size: 1.5rem; margin-bottom: 4px; color: var(--text);">Cronograma de Estudo</h2>
               <p style="color: var(--text3); font-size: 0.9rem; margin-bottom: 24px;">Organização semanal das matérias
               </p>
 
-              <div id="weekly-schedule-grid"
-                style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px;">
+              <div id="weekly-schedule-grid" class="weekly-grid">
 
                 <!-- SEGUNDA -->
                 <div class="event-item study-day" data-day="seg">
@@ -565,31 +563,44 @@
                   </div>
                 </div>
 
+                <!-- SABADO -->
+                <div class="event-item study-day" data-day="sab">
+                  <div class="event-stripe" style="background:#f59e0b"></div>
+                  <div class="event-body">
+                    <div class="event-title"
+                      style="color: #f59e0b; font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; margin-bottom: 8px;">
+                      Sábado</div>
+                    <div class="day-text" style="color: var(--text2); line-height: 1.5; font-size: 0.95rem;">
+                      Carregando...</div>
+                  </div>
+                  <div class="event-actions admin-only hidden">
+                    <button class="btn btn-ghost btn-icon-sm" onclick="openWeeklyEditModal('sab')">
+                      <span class="material-symbols-outlined" style="font-size:20px;">edit</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- DOMINGO -->
+                <div class="event-item study-day" data-day="dom">
+                  <div class="event-stripe" style="background:#ef4444"></div>
+                  <div class="event-body">
+                    <div class="event-title"
+                      style="color: #ef4444; font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; margin-bottom: 8px;">
+                      Domingo</div>
+                    <div class="day-text" style="color: var(--text2); line-height: 1.5; font-size: 0.95rem;">
+                      Carregando...</div>
+                  </div>
+                  <div class="event-actions admin-only hidden">
+                    <button class="btn btn-ghost btn-icon-sm" onclick="openWeeklyEditModal('dom')">
+                      <span class="material-symbols-outlined" style="font-size:20px;">edit</span>
+                    </button>
+                  </div>
+                </div>
+
               </div>
             </section>
 
-            <section style="margin-bottom: 40px;">
-              <h2
-                style="font-size: 1.5rem; margin-bottom: 16px; border-bottom: 2px solid var(--primary-lt); padding-bottom: 8px;">
-                Dicas de Estudo</h2>
-              <div class="cat-grid">
-                <button type="button" class="cat-btn active">
-                  <span class="material-symbols-outlined"
-                    style="display:block; font-size:20px; margin-bottom:4px;">auto_stories</span>
-                  <span>Leitura</span>
-                </button>
-                <button type="button" class="cat-btn">
-                  <span class="material-symbols-outlined"
-                    style="display:block; font-size:20px; margin-bottom:4px;">quiz</span>
-                  <span>Questões</span>
-                </button>
-                <button type="button" class="cat-btn">
-                  <span class="material-symbols-outlined"
-                    style="display:block; font-size:20px; margin-bottom:4px;">history_edu</span>
-                  <span>Revisão</span>
-                </button>
-              </div>
-            </section>
+
 
           </div>
         </div>

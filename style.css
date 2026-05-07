@@ -1552,6 +1552,29 @@ select {
   border-top: 1px solid var(--border);
 }
 
+/* ===== WEEKLY PLANNER GRID ===== */
+.weekly-grid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: 1fr;
+  width: 100%;
+}
+
+@media (min-width: 850px) {
+  .weekly-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.event-item.study-day {
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.event-item.study-day:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
 /* ===== CATEGORY GRID ===== */
 .cat-grid {
   display: grid;
