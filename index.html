@@ -1003,11 +1003,11 @@
             <textarea id="edit-day-text" class="field-input field-textarea" rows="5"
               placeholder="Digite o que estudar hoje..."></textarea>
           </div>
-          <div class="modal-footer" style="margin-top: 20px;">
-            <button type="button" class="btn btn-outline" onclick="closeModal('modal-weekly-edit')">Cancelar</button>
-            <button type="submit" class="btn btn-primary flex-1">Salvar</button>
-          </div>
         </form>
+      </div>
+      <div class="modal-footer" style="padding: 16px; border-top: 1px solid var(--border); background: var(--surface); border-radius: 0 0 24px 24px;">
+        <button type="button" class="btn btn-outline" onclick="closeModal('modal-weekly-edit')">Cancelar</button>
+        <button type="submit" class="btn btn-primary flex-1" form="weekly-edit-form">Salvar</button>
       </div>
     </div>
   </div>
@@ -1029,10 +1029,10 @@
           style="color: var(--text2); line-height: 1.6; white-space: pre-wrap; background: var(--bg); padding: 20px; border-radius: 16px; border: 1px solid var(--border);">
           <!-- Conteúdo completo aqui -->
         </div>
-        <div class="modal-footer" style="margin-top: 24px;">
-          <button type="button" class="btn btn-primary btn-full"
-            onclick="closeModal('modal-weekly-view')">Entendido</button>
-        </div>
+      </div>
+      <div class="modal-footer" style="padding: 16px; border-top: 1px solid var(--border); background: var(--surface); border-radius: 0 0 24px 24px;">
+        <button type="button" class="btn btn-primary btn-full"
+          onclick="closeModal('modal-weekly-view')">Entendido</button>
       </div>
     </div>
   </div>
@@ -1110,12 +1110,11 @@
           </div>
 
           <p id="lesson-error" class="form-error hidden"></p>
-
-          <div class="modal-footer" style="margin-top: 24px;">
-            <button type="button" class="btn btn-outline" onclick="closeModal('modal-lesson')">Cancelar</button>
-            <button type="submit" class="btn btn-primary flex-1">Salvar Conteúdo</button>
-          </div>
         </form>
+      </div>
+      <div class="modal-footer" style="padding: 16px; border-top: 1px solid var(--border); background: var(--surface); border-radius: 0 0 24px 24px;">
+        <button type="button" class="btn btn-outline" onclick="closeModal('modal-lesson')">Cancelar</button>
+        <button type="submit" class="btn btn-primary flex-1" form="lesson-form">Salvar Conteúdo</button>
       </div>
     </div>
   </div>

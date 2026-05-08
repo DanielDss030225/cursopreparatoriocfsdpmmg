@@ -3293,7 +3293,18 @@ document.getElementById('lesson-form').onsubmit = async (e) => {
         updatedAt: new Date().toISOString()
     };
 
-    if (!id) data.createdAt = new Date().toISOString();
+    if (!id) {
+        data.createdAt = new Date().toISOString();
+    } else {
+        const existing = S.lessons.find(l => l.id === id);
+        if (existing && existing.createdAt) {
+            data.createdAt = existing.createdAt;
+        } else if (existing && existing.updatedAt) {
+            data.createdAt = existing.updatedAt;
+        } else {
+            data.createdAt = new Date().toISOString();
+        }
+    }
 
     showLoading('Salvando conteúdo...');
     try {
@@ -3343,7 +3354,11 @@ function renderLessonsView() {
     }
     empty.classList.add('hidden');
 
-    S.lessons.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).forEach(l => {
+    S.lessons.sort((a, b) => {
+        const timeA = new Date(a.createdAt || 0).getTime() || 0;
+        const timeB = new Date(b.createdAt || 0).getTime() || 0;
+        return timeB - timeA;
+    }).forEach(l => {
         const card = document.createElement('div');
         card.className = 'lesson-card';
         card.style = `
@@ -3385,7 +3400,7 @@ function renderLessonsView() {
       <div style="padding: 16px; flex: 1; display: flex; flex-direction: column; gap: 8px;">
         <h3 style="font-size: 1rem; color: var(--text); margin: 0; line-height: 1.4;">${l.title}</h3>
         <div style="margin-top: auto; display: flex; align-items: center; justify-content: space-between;">
-           <span style="font-size: 0.75rem; color: var(--text3);">Cadastrado em ${new Date(l.createdAt).toLocaleDateString()}</span>
+           <span style="font-size: 0.75rem; color: var(--text3);">Cadastrado em ${l.createdAt ? new Date(l.createdAt).toLocaleDateString() : 'Data indisponível'}</span>
            ${isAdmin ? `
             <div style="display: flex; gap: 4px;">
               <button class="btn btn-ghost btn-icon-sm" onclick="openLessonModal('${l.id}'); event.stopPropagation();">
